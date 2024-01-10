@@ -6,6 +6,16 @@ const currentUrlPath = Astro.url.pathname.replace(/\/+$/, "");
 // eg: /tags/tailwindcss => ['tags', 'tailwindcss']
 const breadcrumbList = currentUrlPath.split("/").slice(1);
 
+if (breadcrumbList[0] === "about") {
+  breadcrumbList[0] = "关于";
+} else if (breadcrumbList[0] === "posts") {
+  breadcrumbList[0] = "文章";
+} else if (breadcrumbList[0] === "tags") {
+  breadcrumbList[0] = "标签";
+} else if (breadcrumbList[0] === "search") {
+  breadcrumbList[0] = "搜索";
+}
+
 // if breadcrumb is Home > Posts > 1 <etc>
 // replace Posts with Posts (page number)
 breadcrumbList[0] === "posts" &&
@@ -27,7 +37,7 @@ breadcrumbList[0] === "tags" &&
 <nav class="breadcrumb" aria-label="breadcrumb">
   <ul>
     <li>
-      <a href="/">Home</a>
+      <a href="/">首页</a>
       <span aria-hidden="true">&raquo;</span>
     </li>
     {

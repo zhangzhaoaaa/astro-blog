@@ -6,6 +6,7 @@ import remarkCollapse from "remark-collapse";
 import sitemap from "@astrojs/sitemap";
 import { SITE } from "./src/config";
 import { remarkModifiedTime } from "./remark-modified-time.mjs";
+import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({
@@ -38,5 +39,10 @@ export default defineConfig({
       exclude: ["@resvg/resvg-js"],
     },
   },
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+  }),
   scopedStyleStrategy: "where",
 });

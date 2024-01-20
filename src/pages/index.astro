@@ -9,41 +9,33 @@ import Card from "@components/Card";
 import Socials from "@components/Socials.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import { SOCIALS } from "@config";
+import type { PostOrPage } from "@tryghost/content-api";
 
-const posts = await getCollection("blog");
-
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-
-const socialCount = SOCIALS.filter(social => social.active).length;
-
-import { ghostClient } from "../lib/ghost";
-const posts1 = await ghostClient.posts
-  .browse({
-    limit: "all",
-  })
-  .catch(err => {
-    console.error(err);
-  });
-console.log("post1.....", posts1);
+import { ghostClient, getAllPosts } from "../lib/ghost";
+const postsPage1 = await getAllPosts(1);
+console.log("post1.....", postsPage1);
 ---
 
 <Layout>
   <Header />
   <main id="main-content">
     <section id="hero">
-      <p>我是zeromike，也叫子迈，前端工程师，在做toB内容方向的应用</p>
-      <p>播客「大话前端」UP主</p>
-      <p>公众号「子迈的大话前端」作者</p>
-
       <p>
-        可以查看 <LinkButton
+        我是zeromike，也叫子迈，前端工程师，在做toB内容方向的应用，带领团队交付过中大型项目
+      </p>
+      <p>
+        Podcast「大话前端」主理人，终身学习者，坚持长期主义，可以查看 <LinkButton
           href="/about"
           className="underline decoration-dashed underline-offset-4 hover:text-skin-accent"
         >
           关于我
-        </LinkButton> 更多了解我。
+        </LinkButton> 更多了解我
       </p>
+
+      <div class="social-wrapper">
+        <Socials />
+        
+      </div>
     </section>
 
     <Hr />
@@ -52,18 +44,16 @@ console.log("post1.....", posts1);
       <h2>最近文章</h2>
       <ul>
         {
-          sortedPosts
-            .filter(({ data }) => !data.featured)
-            .map(
-              ({ data, slug }, index) =>
-                index < 4 && (
-                  <Card
-                    href={`/posts/${slug}`}
-                    frontmatter={data}
-                    secHeading={false}
-                  />
-                )
-            )
+          postsPage1.map(
+            (data, index) =>
+              index < 4 && (
+                <Card
+                  href={`/posts/${data.slug}`}
+                  frontmatter={data}
+                  secHeading={false}
+                />
+              )
+          )
         }
       </ul>
       <div class="all-posts-btn-wrapper">

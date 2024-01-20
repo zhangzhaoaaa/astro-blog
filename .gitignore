@@ -21,7 +21,7 @@ pnpm-debug.log*
 
 # ignore .astro directory
 .astro
-
+.vercel
 # ignore Jampack cache files
 .jampack/
 

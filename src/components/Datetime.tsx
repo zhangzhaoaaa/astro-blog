@@ -46,6 +46,10 @@ export default function Datetime({
 }
 
 const FormattedDatetime = ({ pubDatetime, modDatetime }: DatetimesProps) => {
+  if (!pubDatetime || !modDatetime) {
+    return null;
+  }
+
   const myDatetime = new Date(modDatetime ? modDatetime : pubDatetime);
 
   const date = myDatetime.toLocaleDateString(LOCALE.langTag, {
@@ -54,9 +58,11 @@ const FormattedDatetime = ({ pubDatetime, modDatetime }: DatetimesProps) => {
     day: "numeric",
   });
 
+  console.log("date...", myDatetime);
+
   return (
     <>
-      <time dateTime={myDatetime.toISOString()}>{date}</time>
+      <time dateTime={myDatetime?.toISOString()}>{date}</time>
     </>
   );
 };

@@ -1,0 +1,44 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import Posts from "@layouts/Posts.astro";
+import { getAllPostsForSlug } from "lib/ghost";
+import getPagination from "@utils/getPagination";
+import Paginator from "@components/Paginator.astro";
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Pagination from "@components/Pagination.astro";
+import Card from "@components/Card";
+import { SITE } from "@config";
+import { CONSTANT } from "lib/constant";
+
+export interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+export async function getStaticPaths({ paginate }) {
+  const posts = await getAllPostsForSlug();
+
+  return paginate(posts, { pageSize:CONSTANT.pageSize });
+}
+
+const { page } = Astro.props;
+---
+
+<Layout title={`文章 | ${SITE.title}`}>
+  <Header activeNav="posts" />
+  <Main>
+    <ul>
+      {
+        page.data.map(data => (
+          <Card href={`/posts/${data.slug}`} frontmatter={data} />
+        ))
+      }
+    </ul>
+  </Main>
+
+  <Pagination {page} />
+
+  <!-- <Footer noMarginTop={totalPages > 1} /> -->
+</Layout>

@@ -1,35 +1,55 @@
 import { slugifyStr } from "@utils/slugify";
 import Datetime from "./Datetime";
-import type { CollectionEntry } from "astro:content";
-
+import { IconCalendarMonth } from "@tabler/icons-react";
+import type { PostOrPage } from "@tryghost/content-api";
+import "@styles/card.css";
+import dayjs from "dayjs";
 export interface Props {
   href?: string;
-  frontmatter: CollectionEntry<"blog">["data"];
+  frontmatter: PostOrPage;
   secHeading?: boolean;
 }
 
-export default function Card({ href, frontmatter, secHeading = true }: Props) {
-  const { title, pubDatetime, modDatetime, description } = frontmatter;
+const renderTime = time => {
+  return (
+    <span class="text-sm text-neutral-400">
+      更新时间 {dayjs(time).format("YYYY-MM-DD")}
+    </span>
+  );
+};
 
+export default function Card({ href, frontmatter, secHeading = true }: Props) {
+  const { title, created_at, updated_at, excerpt, feature_image } = frontmatter;
+  console.log("title....", href, title, created_at, updated_at, feature_image);
   const headerProps = {
     style: { viewTransitionName: slugifyStr(title) },
     className: "text-lg font-medium decoration-dashed hover:underline",
   };
 
   return (
-    <li className="my-6">
-      <a
-        href={href}
-        className="inline-block text-lg font-medium text-skin-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
-      >
-        {secHeading ? (
-          <h2 {...headerProps}>{title}</h2>
-        ) : (
-          <h3 {...headerProps}>{title}</h3>
-        )}
-      </a>
-      <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} />
-      <p>{description}</p>
-    </li>
+    <a href={href}>
+      <li className="blog-detail-card my-6">
+        <div className="card-img">
+          <img
+            src={
+              feature_image ||
+              "https://images.unsplash.com/photo-1682685795463-0674c065f315?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wxfDF8YWxsfDF8fHx8fHwyfHwxNzA0OTkyNDg0fA&ixlib=rb-4.0.3&q=80&w=2000"
+            }
+            alt="descriptive text"
+          />
+        </div>
+        <div className="card-content">
+          <div>
+            {secHeading ? (
+              <h2 {...headerProps}>{title}</h2>
+            ) : (
+              <h3 {...headerProps}>{title}</h3>
+            )}
+          </div>
+          <p className="line-clamp-2">{excerpt}</p>
+          <p>{renderTime(updated_at)}</p>
+        </div>
+      </li>
+    </a>
   );
 }

@@ -1,5 +1,4 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
 import Header from "@components/Header.astro";
@@ -11,10 +10,10 @@ import { SITE } from "@config";
 export interface Props {
   currentPage: number;
   totalPages: number;
-  paginatedPosts: CollectionEntry<"blog">[];
+  posts: any;
 }
 
-const { currentPage, totalPages, paginatedPosts } = Astro.props;
+const { currentPage, totalPages, posts } = Astro.props;
 ---
 
 <Layout title={`文章 | ${SITE.title}`}>
@@ -22,8 +21,8 @@ const { currentPage, totalPages, paginatedPosts } = Astro.props;
   <Main>
     <ul>
       {
-        paginatedPosts.map(({ data, slug }) => (
-          <Card href={`/posts/${slug}`} frontmatter={data} />
+        posts.map(data => (
+          <Card href={`/posts/${data.slug}`} frontmatter={data} />
         ))
       }
     </ul>

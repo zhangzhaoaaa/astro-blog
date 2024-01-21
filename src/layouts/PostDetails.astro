@@ -2,15 +2,8 @@
 import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
-import Tag from "@components/Tag.astro";
-import Datetime from "@components/Datetime";
 import type { CollectionEntry } from "astro:content";
 import { slugifyStr } from "@utils/slugify";
-import ShareLinks from "@components/ShareLinks.astro";
-
-export interface Props {
-  post: CollectionEntry<"blog">;
-}
 
 const { post } = Astro.props;
 
@@ -27,8 +20,6 @@ const {
   tags,
   html,
 } = post;
-
-// const { Content } = await post.render();
 
 const ogImageUrl = typeof ogImage === "string" ? ogImage : ogImage?.src;
 const ogUrl = new URL(
@@ -64,12 +55,6 @@ const layoutProps = {
   </div>
   <main id="main-content">
     <h1 transition:name={slugifyStr(title)} class="post-title">{title}</h1>
-    <!-- <Datetime
-      pubDatetime={pubDatetime}
-      modDatetime={modDatetime}
-      size="lg"
-      className="my-2"
-    /> -->
     <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
       <!-- <Content /> -->
       <Fragment set:html={html} />

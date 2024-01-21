@@ -21,7 +21,7 @@ const { currentPage, totalPages, posts } = Astro.props;
   <Main>
     <ul>
       {
-        posts.map(data => (
+        posts.map((data: any) => (
           <Card href={`/posts/${data.slug}`} frontmatter={data} />
         ))
       }

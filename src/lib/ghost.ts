@@ -5,12 +5,12 @@ import { CONSTANT } from "./constant";
 export const ghostClient = new GhostContentAPI({
   url: "https://zeromikede-shi-guang-ji.ghost.io", // 这是 Ghost 站点运行在本地环境中的默认 URL
   key: import.meta.env.CONTENT_API_KEY,
-  version: "v3.0",
+  version: "v3",
 });
 /**
  * 分页获取所有博客信息
  */
-export const getAllPosts = async page => {
+export const getAllPosts = async (page: number) => {
   return await ghostClient.posts
     .browse({
       limit: CONSTANT.pageSize,
@@ -34,14 +34,12 @@ export const getAllPostsForSlug = async () => {
     });
 };
 
-export const getBlogDetail = async ({ slug }) => {
+export const getBlogDetail = async (params: any) => {
+  const { slug } = params;
   return await ghostClient.posts
-    .read(
-      {
-        slug,
-      },
-      { indclude: "authors,tags" }
-    )
+    .read({
+      slug: slug,
+    })
     .catch(err => {
       console.error(err);
     });

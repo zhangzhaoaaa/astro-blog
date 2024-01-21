@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import { SITE } from "@config";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
@@ -10,7 +9,7 @@ import SearchBar from "@components/Search";
 import { getAllPostsForSlug } from "../lib/ghost";
 
 const posts = await getAllPostsForSlug();
-const searchList = posts.map(data => ({
+const searchList: any = posts?.map((data: any) => ({
   title: data.title,
   description: data.excerpt,
   data,

@@ -19,7 +19,7 @@ const next = currentPage < totalPages ? "" : "disabled";
     <nav class="pagination-wrapper" aria-label="Pagination">
       <LinkButton
         disabled={prev === "disabled"}
-        href={prevUrl}
+        href={prevUrl || ""}
         className={`mr-4 select-none ${prev}`}
         ariaLabel="Previous"
       >
@@ -31,7 +31,7 @@ const next = currentPage < totalPages ? "" : "disabled";
       {currentPage} / {totalPages}
       <LinkButton
         disabled={next === "disabled"}
-        href={nextUrl}
+        href={nextUrl || ""}
         className={`ml-4 select-none ${next}`}
         ariaLabel="Next"
       >

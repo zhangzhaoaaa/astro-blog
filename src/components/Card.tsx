@@ -10,16 +10,22 @@ export interface Props {
   secHeading?: boolean;
 }
 
-const renderTime = time => {
+const renderTime = (time: string | null) => {
   return (
-    <span class="text-sm text-neutral-400">
+    <span className="text-sm text-neutral-400">
       更新时间 {dayjs(time).format("YYYY-MM-DD")}
     </span>
   );
 };
 
 export default function Card({ href, frontmatter, secHeading = true }: Props) {
-  const { title, created_at, updated_at, excerpt, feature_image } = frontmatter;
+  const {
+    title = "",
+    created_at = "",
+    updated_at = "",
+    excerpt,
+    feature_image,
+  } = frontmatter;
   console.log("title....", href, title, created_at, updated_at, feature_image);
   const headerProps = {
     style: { viewTransitionName: slugifyStr(title) },

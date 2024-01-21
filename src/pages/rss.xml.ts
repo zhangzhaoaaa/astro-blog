@@ -8,11 +8,12 @@ export async function GET() {
     title: SITE.title,
     description: SITE.desc,
     site: SITE.website,
-    items: posts.map(data => ({
-      link: `posts/${data.slug}`,
-      title: data.title,
-      description: data.excerpt,
-      pubDate: new Date(data.updated_at ?? data.created_at),
-    })),
+    items:
+      posts?.map((data: any) => ({
+        link: `posts/${data.slug}`,
+        title: data.title,
+        description: data.excerpt,
+        pubDate: new Date(data.updated_at ?? data.created_at),
+      })) || [],
   });
 }

@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
@@ -7,11 +6,8 @@ import LinkButton from "@components/LinkButton.astro";
 import Hr from "@components/Hr.astro";
 import Card from "@components/Card";
 import Socials from "@components/Socials.astro";
-import getSortedPosts from "@utils/getSortedPosts";
-import { SOCIALS } from "@config";
-import type { PostOrPage } from "@tryghost/content-api";
 
-import { ghostClient, getAllPosts } from "../lib/ghost";
+import { getAllPosts } from "../lib/ghost";
 const postsPage1 = await getAllPosts(1);
 console.log("post1.....", postsPage1);
 ---
@@ -34,7 +30,6 @@ console.log("post1.....", postsPage1);
 
       <div class="social-wrapper">
         <Socials />
-        
       </div>
     </section>
 
@@ -44,7 +39,7 @@ console.log("post1.....", postsPage1);
       <h2>最近文章</h2>
       <ul>
         {
-          postsPage1.map(
+          postsPage1?.map(
             (data, index) =>
               index < 4 && (
                 <Card

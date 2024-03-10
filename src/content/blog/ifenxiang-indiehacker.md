@@ -5,8 +5,6 @@ modDatetime: 2024-02-13
 title: 技术与思维：打造个性化分享工具的独立之路
 slug: "ifenxiang-indiehacker"
 draft: false
-tags:
-  - "2024"
 description: 本文探讨了开发个性化分享工具的过程，包括选择技术栈、实现功能和面对的挑战。同时，深入讨论了独立开发所需的技能和思考
 ---
 

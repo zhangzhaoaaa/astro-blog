@@ -14,10 +14,14 @@ export interface Props {
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
+  console.log("posts .getCollection...", posts);
 
   const tags = getUniqueTags(posts);
 
+  console.log("tags .getCollection...", tags);
+
   return tags.flatMap(({ tag, tagName }) => {
+    console.log("page....", posts);
     const tagPosts = getPostsByTag(posts, tag);
     const totalPages = getPageNumbers(tagPosts.length);
 
@@ -32,6 +36,8 @@ const { page } = Astro.params;
 const { tag, tagName } = Astro.props;
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+console.log("page..222..", posts);
 
 const postsByTag = getPostsByTag(posts, tag);
 

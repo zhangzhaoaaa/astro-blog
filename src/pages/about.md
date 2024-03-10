@@ -5,7 +5,7 @@ title: "关于"
 
 <p>
     <strong>Podcast</strong>
-    「大话前端」UP主，可在小宇宙、喜马拉雅、苹果播客、snipd、listennotes上搜索「大话前端」找到我
+    「大话前端」、「大话英语」UP主，可在小宇宙、喜马拉雅、苹果播客、snipd、listennotes上搜索「大话前端」、「大话英语」找到我
 </p>
 <p><strong>公众号</strong>「子迈的大话前端」作者</p>
 <p>

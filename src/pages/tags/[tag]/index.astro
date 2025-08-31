@@ -6,7 +6,9 @@ import getPagination from "@utils/getPagination";
 import getUniqueTags from "@utils/getUniqueTags";
 
 export async function getStaticPaths() {
+  console.log("postsdddd....");
   const posts = await getCollection("blog");
+  console.log("posts....", posts);
 
   const tags = getUniqueTags(posts);
 
@@ -20,6 +22,7 @@ export async function getStaticPaths() {
 
 const { tag, tagName, posts } = Astro.props;
 
+console.log("tags....", posts);
 const postsByTag = getPostsByTag(posts, tag);
 
 const pagination = getPagination({

@@ -14,6 +14,8 @@ export interface Props {
 
 const { post } = Astro.props;
 
+
+
 const {
   title,
   author,
@@ -25,7 +27,9 @@ const {
   tags,
 } = post.data;
 
-const { Content } = await post.render();
+const { Content,remarkPluginFrontmatter
+
+ } = await post.render();
 
 const ogImageUrl = typeof ogImage === "string" ? ogImage : ogImage?.src;
 const ogUrl = new URL(
@@ -64,9 +68,13 @@ const layoutProps = {
     <Datetime
       pubDatetime={pubDatetime}
       modDatetime={modDatetime}
-      size="lg"
       className="my-2"
+      minutesRead={remarkPluginFrontmatter.minutesRead}
+      wordCount={remarkPluginFrontmatter.wordCount} 
     />
+    <!-- <p class="text-sm text-gray-500">
+      阅读时间: {remarkPluginFrontmatter.minutesRead} | 字数: {remarkPluginFrontmatter.wordCount}
+    </p> -->
     <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
       <Content />
     </article>

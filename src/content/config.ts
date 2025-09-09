@@ -20,6 +20,8 @@ const blog = defineCollection({
         .optional(),
       description: z.string(),
       canonicalURL: z.string().optional(),
+      minutesRead: z.string().optional(),
+      wordCount: z.number().optional(),
     }),
 });
 

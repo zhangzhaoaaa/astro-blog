@@ -21,7 +21,9 @@ export default function Datetime({
   wordCount,
 }: Props) {
   return (
-    <div className={`flex flex-wrap items-center opacity-80 ${className}`}>
+    <div
+      className={`lg:gap-x-2 flex flex-wrap items-center gap-x-0 opacity-80 ${className}`}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className={`${
@@ -39,14 +41,16 @@ export default function Datetime({
       ) : (
         <span className="sr-only">Published:</span>
       )}
-      <span className={`italic ${size === "sm" ? "text-sm" : "text-base"}`}>
+      <span
+        className={`mr-2 italic ${size === "sm" ? "text-sm" : "text-base"}`}
+      >
         <FormattedDatetime
           pubDatetime={pubDatetime}
           modDatetime={modDatetime}
         />
       </span>
       {minutesRead && wordCount ? (
-        <span className="ml-2 text-sm text-gray-500">
+        <span className="text-sm text-gray-500">
           阅读时间: {minutesRead} | 字数: {wordCount}
         </span>
       ) : (

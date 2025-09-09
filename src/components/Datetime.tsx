@@ -8,6 +8,8 @@ interface DatetimesProps {
 interface Props extends DatetimesProps {
   size?: "sm" | "lg";
   className?: string;
+  minutesRead?: string; // from remark plugin (e.g., "6 min read")
+  wordCount?: number;
 }
 
 export default function Datetime({
@@ -15,9 +17,11 @@ export default function Datetime({
   modDatetime,
   size = "sm",
   className,
+  minutesRead,
+  wordCount,
 }: Props) {
   return (
-    <div className={`flex items-center space-x-2 opacity-80 ${className}`}>
+    <div className={`flex flex-wrap items-center opacity-80 ${className}`}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className={`${
@@ -41,6 +45,13 @@ export default function Datetime({
           modDatetime={modDatetime}
         />
       </span>
+      {minutesRead && wordCount ? (
+        <span className="ml-2 text-sm text-gray-500">
+          阅读时间: {minutesRead} | 字数: {wordCount}
+        </span>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

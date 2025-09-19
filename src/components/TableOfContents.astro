@@ -1,0 +1,31 @@
+--- 
+const { headings } = Astro.props;
+---
+<nav class="toc">
+  <ul>
+    {headings.map((heading: { slug: any; text: unknown; subheadings: any[]; }) => (
+      <li>
+        <a href={`#${heading.slug}`}>{heading.text}</a>
+        {heading?.subheadings?.length > 0 && (
+          <ul>
+            {heading?.subheadings?.map((sub: { slug: any; text: unknown; }) => (
+              <li><a href={`#${sub.slug}`}>{sub.text}</a></li>
+            ))}
+          </ul>
+        )}
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .toc {
+    position: sticky;
+    top: 20px;
+    float: right;
+    width: 250px;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 5px;
+  }
+</style>

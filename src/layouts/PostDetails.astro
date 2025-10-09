@@ -50,8 +50,8 @@ const layoutProps = {
   <Header />
   <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
     <button
+      id="back-button"
       class="focus-outline mb-2 mt-8 flex hover:opacity-75"
-      onclick="()=>history.push('/')"
     >
       <svg xmlns="http://www.w3.org/2000/svg"
         ><path
@@ -60,10 +60,11 @@ const layoutProps = {
       </svg><span>返回</span>
     </button>
   </div>
-  <main id="main-content">
+  <main id="main-content" class="flex-1">
     <div class="sticky top-0 z-20 bg-skin-card/80 backdrop-blur supports-[backdrop-filter]:bg-skin-card/60 lg:static">
       <div class="mx-auto w-full max-w-3xl px-4 py-2 flex items-start justify-between gap-2">
         <h1 transition:name={slugifyStr(title)} class="post-title">{title}</h1>
+        {headings && headings.length > 0 && (
         <div class="relative lg:hidden">
           <button
             id="mobile-toc-toggle"
@@ -94,6 +95,7 @@ const layoutProps = {
             </nav>
           </div>
         </div>
+        )}
       </div>
     </div>
     <Datetime
@@ -104,7 +106,7 @@ const layoutProps = {
       wordCount={remarkPluginFrontmatter.wordCount}
     />
 
-    <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
+    <article id="article" role="article" class="prose mx-auto max-w-3xl">
       <Content />
     </article>
     <!-- <ul class="my-8">
@@ -156,10 +158,11 @@ const layoutProps = {
       crossorigin="anonymous"
       async></script>
   </main>
--  <aside style="position: fixed; top: 20rem;right:2rem">
-+  <aside class="hidden lg:block" style="position: fixed; top: 20rem; right: 2rem">
+  {headings && headings.length > 0 && (
+  <aside class="hidden lg:block" style="position: fixed; top: 20rem; right: 2rem">
     <TableOfContents headings={headings} />
   </aside>
+  )}
   <Footer />
 </Layout>
 
@@ -226,6 +229,41 @@ const layoutProps = {
   }
   backToTop();
   document.addEventListener("astro:after-swap", backToTop);
+  
+  /** Back button logic */
+  function initBackButton() {
+    const backBtn = document.getElementById("back-button");
+    if (!backBtn) return;
+    
+    backBtn.addEventListener("click", () => {
+      // 如果有浏览历史记录，返回上一页；否则跳转到首页
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "/";
+      }
+    });
+  }
+  initBackButton();
+  document.addEventListener("astro:after-swap", initBackButton);
+  
+  /** Wrap tables in a scrollable container */
+  function wrapTables() {
+    const tables = document.querySelectorAll(".prose table");
+    tables.forEach(table => {
+      // 检查是否已经被包装过
+      if (table.parentElement?.classList.contains("table-wrapper")) {
+        return;
+      }
+      
+      const wrapper = document.createElement("div");
+      wrapper.className = "table-wrapper";
+      table.parentNode?.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    });
+  }
+  wrapTables();
+  document.addEventListener("astro:after-swap", wrapTables);
   
   /** Mobile TOC toggle logic */
   function initMobileToc() {

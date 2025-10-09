@@ -1,14 +1,16 @@
 --- 
 const { headings } = Astro.props;
+
+type Heading = { slug: string; text: string; subheadings: Heading[]; };
 ---
 <nav class="toc">
   <ul>
-    {headings.map((heading: { slug: any; text: unknown; subheadings: any[]; }) => (
+    {headings.map((heading: Heading) => (
       <li>
         <a href={`#${heading.slug}`}>{heading.text}</a>
         {heading?.subheadings?.length > 0 && (
           <ul>
-            {heading?.subheadings?.map((sub: { slug: any; text: unknown; }) => (
+            {heading?.subheadings?.map((sub: Heading) => (
               <li><a href={`#${sub.slug}`}>{sub.text}</a></li>
             ))}
           </ul>

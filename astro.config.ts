@@ -8,6 +8,9 @@ import { SITE } from "./src/config";
 import { remarkModifiedTime } from "./remark-modified-time.mjs";
 import vercel from "@astrojs/vercel/serverless";
 import { remarkReadingTime } from "./src/utils/remark-reading-time";
+import rehypeToc from "rehype-toc";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,8 +23,18 @@ export default defineConfig({
     sitemap(),
   ],
   markdown: {
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: "append" }],
+      [
+        rehypeToc as any,
+        {
+          headings: ["h1", "h2", "h3"], // 指定生成目录的标题级别
+          cssClasses: { toc: "toc", link: "toc-link" }, // 自定义 CSS 类
+        },
+      ],
+    ],
     remarkPlugins: [
-      // remarkToc,
       [
         remarkCollapse,
         {

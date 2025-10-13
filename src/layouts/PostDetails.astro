@@ -7,14 +7,13 @@ import Datetime from "@components/Datetime";
 import type { CollectionEntry } from "astro:content";
 import { slugifyStr } from "@utils/slugify";
 import ShareLinks from "@components/ShareLinks.astro";
+import TableOfContents from "@components/TableOfContents.astro";
 
 export interface Props {
   post: CollectionEntry<"blog">;
 }
 
 const { post } = Astro.props;
-
-
 
 const {
   title,
@@ -27,9 +26,7 @@ const {
   tags,
 } = post.data;
 
-const { Content,remarkPluginFrontmatter
-
- } = await post.render();
+const { Content, remarkPluginFrontmatter, headings } = await post.render();
 
 const ogImageUrl = typeof ogImage === "string" ? ogImage : ogImage?.src;
 const ogUrl = new URL(
@@ -53,8 +50,8 @@ const layoutProps = {
   <Header />
   <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
     <button
+      id="back-button"
       class="focus-outline mb-2 mt-8 flex hover:opacity-75"
-      onclick="history.back()"
     >
       <svg xmlns="http://www.w3.org/2000/svg"
         ><path
@@ -63,22 +60,55 @@ const layoutProps = {
       </svg><span>返回</span>
     </button>
   </div>
-  <main id="main-content">
-    <h1 transition:name={slugifyStr(title)} class="post-title">{title}</h1>
+  <main id="main-content" class="flex-1">
+    <div class="sticky top-0 z-20 bg-skin-card/80 backdrop-blur supports-[backdrop-filter]:bg-skin-card/60 lg:static">
+      <div class="mx-auto w-full max-w-3xl px-4 py-2 flex items-start justify-between gap-2">
+        <h1 transition:name={slugifyStr(title)} class="post-title">{title}</h1>
+        {headings && headings.length > 0 && (
+        <div class="relative lg:hidden">
+          <button
+            id="mobile-toc-toggle"
+            class="rounded-full border border-skin-line px-3 py-1 text-sm bg-skin-card text-skin-base shadow flex items-center gap-1"
+            aria-expanded="false"
+            aria-controls="mobile-toc-panel"
+          >
+            <span>目录</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"></path></svg>
+          </button>
+          <div
+            id="mobile-toc-panel"
+            class="absolute right-0 mt-2 w-64 max-h-80 overflow-auto rounded-md bg-skin-card text-skin-base shadow-lg border border-skin-line hidden"
+          >
+            <nav class="p-2">
+              <ul class="space-y-1">
+                {headings?.map((heading: any) => (
+                  <li>
+                    <a
+                      class={`block px-3 py-2 hover:bg-skin-fill ${heading?.depth >= 3 ? 'pl-4 text-sm' : ''}`}
+                      href={`#${heading.slug}`}
+                    >
+                      {heading?.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        </div>
+        )}
+      </div>
+    </div>
     <Datetime
       pubDatetime={pubDatetime}
       modDatetime={modDatetime}
       className="my-2"
       minutesRead={remarkPluginFrontmatter.minutesRead}
-      wordCount={remarkPluginFrontmatter.wordCount} 
+      wordCount={remarkPluginFrontmatter.wordCount}
     />
-    <!-- <p class="text-sm text-gray-500">
-      阅读时间: {remarkPluginFrontmatter.minutesRead} | 字数: {remarkPluginFrontmatter.wordCount}
-    </p> -->
-    <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
+
+    <article id="article" role="article" class="prose mx-auto max-w-3xl">
       <Content />
     </article>
-
     <!-- <ul class="my-8">
       {tags.map(tag => <Tag tag={slugifyStr(tag)} />)}
     </ul> -->
@@ -128,6 +158,11 @@ const layoutProps = {
       crossorigin="anonymous"
       async></script>
   </main>
+  {headings && headings.length > 0 && (
+  <aside class="hidden lg:block" style="position: fixed; top: 20rem; right: 2rem">
+    <TableOfContents headings={headings} />
+  </aside>
+  )}
   <Footer />
 </Layout>
 
@@ -194,4 +229,87 @@ const layoutProps = {
   }
   backToTop();
   document.addEventListener("astro:after-swap", backToTop);
-</script>
+  
+  /** Back button logic */
+  function initBackButton() {
+    const backBtn = document.getElementById("back-button");
+    if (!backBtn) return;
+    
+    backBtn.addEventListener("click", () => {
+      // 如果有浏览历史记录，返回上一页；否则跳转到首页
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "/";
+      }
+    });
+  }
+  initBackButton();
+  document.addEventListener("astro:after-swap", initBackButton);
+  
+  /** Wrap tables in a scrollable container */
+  function wrapTables() {
+    const tables = document.querySelectorAll(".prose table");
+    tables.forEach(table => {
+      // 检查是否已经被包装过
+      if (table.parentElement?.classList.contains("table-wrapper")) {
+        return;
+      }
+      
+      const wrapper = document.createElement("div");
+      wrapper.className = "table-wrapper";
+      table.parentNode?.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    });
+  }
+  wrapTables();
+  document.addEventListener("astro:after-swap", wrapTables);
+  
+  /** Mobile TOC toggle logic */
+  function initMobileToc() {
+    const btn = document.getElementById("mobile-toc-toggle");
+    const panel = document.getElementById("mobile-toc-panel");
+    if (!btn || !panel) return;
+
+    const close = () => {
+      panel.classList.add("hidden");
+      btn.setAttribute("aria-expanded", "false");
+    };
+    const open = () => {
+      panel.classList.remove("hidden");
+      btn.setAttribute("aria-expanded", "true");
+    };
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (panel.classList.contains("hidden")) open();
+      else close();
+    });
+    document.addEventListener("click", (e) => {
+      const target = e.target;
+      if (
+        !target ||
+        (!(target instanceof Node && panel.contains(target)) && target !== btn)
+      ) close();
+    });
+    panel.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => close());
+    });
+  }
+  initMobileToc();
+  document.addEventListener("astro:after-swap", initMobileToc);
+ </script>
+
+ <style>
+  .layout {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 2rem;
+  }
+  article {
+    padding: 1rem;
+  }
+  aside {
+    padding: 1rem;
+  }
+</style>

@@ -77,6 +77,21 @@
   tfoot td:first-child {
     padding-left: 0.5714286em;
   }
+  /* 表格包装器用于响应式滚动 */
+  .table-wrapper {
+    @apply overflow-x-auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-card)) rgb(var(--color-fill));
+  }
+  .table-wrapper::-webkit-scrollbar {
+    @apply h-2;
+  }
+  .table-wrapper::-webkit-scrollbar-track {
+    @apply bg-skin-fill rounded;
+  }
+  .table-wrapper::-webkit-scrollbar-thumb {
+    @apply bg-skin-card rounded;
+  }
   .prose h2#table-of-contents {
     @apply mb-2;
   }

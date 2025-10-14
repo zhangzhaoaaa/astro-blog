@@ -1,0 +1,179 @@
+/* Tweet-specific styles using TailwindCSS design system */
+
+/* Tweet Card Base Styles */
+.tweet-card {
+  @apply bg-skin-card border border-skin-line rounded-lg transition-all duration-300;
+  @apply hover:shadow-md hover:border-skin-accent/20;
+}
+
+.tweet-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Tweet Grid Layout - Single Column */
+.tweets-grid {
+  @apply grid gap-6 grid-cols-1 max-w-2xl mx-auto;
+}
+
+/* Tweet Card Content */
+.tweet-content {
+  @apply text-skin-base leading-relaxed;
+}
+
+.tweet-content h1,
+.tweet-content h2,
+.tweet-content h3 {
+  @apply text-skin-accent font-semibold mb-2;
+}
+
+.tweet-content h1 { @apply text-lg; }
+.tweet-content h2 { @apply text-base; }
+.tweet-content h3 { @apply text-sm; }
+
+.tweet-content p {
+    white-space: break-spaces;
+  @apply mb-3 last:mb-0;
+}
+
+.tweet-content code {
+  @apply bg-skin-card-muted px-1 py-0.5 rounded text-sm font-mono;
+}
+
+.tweet-content pre {
+  @apply bg-skin-card-muted p-3 rounded-md overflow-x-auto text-sm;
+}
+
+.tweet-content blockquote {
+  @apply border-l-4 border-skin-accent pl-4 italic text-skin-muted;
+}
+
+.tweet-content ul,
+.tweet-content ol {
+  @apply ml-4 mb-3;
+}
+
+.tweet-content li {
+  @apply mb-1;
+}
+
+/* Tweet Metadata */
+.tweet-meta {
+  @apply flex items-center gap-3 text-sm text-skin-muted;
+}
+
+.tweet-meta-item {
+  @apply flex items-center gap-1;
+}
+
+/* Tweet Tags */
+.tweet-tags {
+  @apply flex flex-wrap gap-2 mt-3;
+}
+
+.tweet-tag {
+  @apply bg-skin-accent/10 text-skin-accent px-2 py-1 rounded-full text-xs;
+  @apply hover:bg-skin-accent/20 transition-colors;
+}
+
+/* Tweet Actions */
+.tweet-actions {
+  @apply flex items-center gap-3 border-t border-skin-line;
+}
+
+.tweet-action {
+  @apply flex items-center gap-1 text-sm text-skin-muted;
+  @apply hover:text-skin-accent transition-colors cursor-pointer;
+}
+
+/* Featured Tweet Styles */
+.tweet-card.featured {
+  @apply border-skin-accent/50 bg-gradient-to-br from-skin-card to-skin-accent/5;
+}
+
+.tweet-card.featured::before {
+  content: "✨";
+  @apply absolute -top-2 -right-2 text-lg;
+}
+
+/* Infinite Scroll Loading */
+.tweet-loading {
+  @apply flex items-center justify-center py-8;
+}
+
+.tweet-loading-spinner {
+  @apply animate-spin h-6 w-6 border-2 border-skin-accent border-t-transparent rounded-full;
+}
+
+.tweet-loading-text {
+  @apply ml-3 text-skin-muted;
+}
+
+/* Empty State */
+.tweets-empty {
+  @apply text-center py-12;
+}
+
+.tweets-empty-icon {
+  @apply mx-auto mb-4 text-4xl text-skin-muted;
+}
+
+.tweets-empty-title {
+  @apply text-lg font-semibold text-skin-base mb-2;
+}
+
+.tweets-empty-description {
+  @apply text-skin-muted;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .tweets-grid {
+    @apply gap-4;
+  }
+  
+  .tweet-card {
+    @apply p-4;
+  }
+  
+  .tweet-meta {
+    @apply flex-col items-start gap-2;
+  }
+  
+  .tweet-actions {
+    @apply justify-center;
+  }
+}
+
+/* Dark Mode Enhancements */
+@media (prefers-color-scheme: dark) {
+  .tweet-card {
+    @apply shadow-lg shadow-black/10;
+  }
+  
+  .tweet-card:hover {
+    @apply shadow-xl shadow-black/20;
+  }
+}
+
+/* Animation Classes */
+.tweet-enter {
+  @apply opacity-0 translate-y-4;
+  animation: tweetEnter 0.5s ease-out forwards;
+}
+
+@keyframes tweetEnter {
+  to {
+    @apply opacity-100 translate-y-0;
+  }
+}
+
+.tweet-fade-in {
+  @apply opacity-0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    @apply opacity-100;
+  }
+}

@@ -6,7 +6,7 @@ import remarkCollapse from "remark-collapse";
 import sitemap from "@astrojs/sitemap";
 import { SITE } from "./src/config";
 import { remarkModifiedTime } from "./remark-modified-time.mjs";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 import { remarkReadingTime } from "./src/utils/remark-reading-time";
 import rehypeToc from "rehype-toc";
 import rehypeSlug from "rehype-slug";

@@ -35,3 +35,7 @@ pnpm-debug.log*
 .pnp.*
 .vercel/
 .vercel
+specs/
+.github/
+.vscode/
+.specify/

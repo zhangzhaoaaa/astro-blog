@@ -11,10 +11,12 @@ function withOpacity(variableName) {
 module.exports = {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
-    // Remove the following screen breakpoint or add other breakpoints
-    // if one breakpoint is not enough for you
+    // Screen breakpoints for responsive design
     screens: {
       sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
     },
 
     extend: {
@@ -23,6 +25,7 @@ module.exports = {
           base: withOpacity("--color-text-base"),
           accent: withOpacity("--color-accent"),
           inverted: withOpacity("--color-fill"),
+          muted: withOpacity("--color-text-muted"),
         },
       },
       backgroundColor: {
@@ -44,6 +47,14 @@ module.exports = {
           line: withOpacity("--color-border"),
           fill: withOpacity("--color-text-base"),
           accent: withOpacity("--color-accent"),
+        },
+      },
+      gradientColorStops: {
+        skin: {
+          base: withOpacity("--color-text-base"),
+          accent: withOpacity("--color-accent"),
+          card: withOpacity("--color-card"),
+          fill: withOpacity("--color-fill"),
         },
       },
       fill: {

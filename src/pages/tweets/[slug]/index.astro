@@ -1,0 +1,154 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import TweetsLayout from "../../../layouts/TweetsLayout.astro";
+import Tag from "../../../components/Tag.astro";
+import Datetime from "../../../components/Datetime.tsx";
+
+export interface Props {
+  tweet: CollectionEntry<"tweets">;
+}
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const tweets = await getCollection("tweets", ({ data }) => {
+    return !data.draft;
+  });
+  
+  console.log('Available tweet slugs:', tweets.map(t => t.slug));
+  
+  return tweets.map((tweet) => ({
+    params: { slug: tweet.slug },
+    props: { tweet },
+  }));
+}
+
+const { tweet } = Astro.props;
+
+// Add safety check for tweet data
+if (!tweet || !tweet.data) {
+  throw new Error(`Tweet not found or invalid tweet data`);
+}
+
+const { title, pubDatetime, tags } = tweet.data;
+
+const { Content } = await tweet.render();
+
+// Calculate reading stats from tweet body
+const wordCount = tweet.body.split(/\s+/).length;
+const readingTime = `${Math.ceil(wordCount / 200)} 分钟阅读`;
+---
+
+<TweetsLayout
+  title={title || '推文详情'}
+  description={title || '推文详情'}
+  activeNav="tweets"
+>
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="mb-8">
+      <button
+        class="inline-flex items-center space-x-2 text-skin-accent hover:text-skin-accent/80 transition-colors focus:outline-none focus:ring-2 focus:ring-skin-accent focus:ring-opacity-50 rounded-lg px-2 py-1"
+        onclick="history.back()"
+      >
+        <svg class="w-4 h-4 transition-transform hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        <span>返回推文列表</span>
+      </button>
+    </div>
+
+    <main id="main-content">
+      <article class="tweet-detail">
+        <header class="tweet-header mb-8">
+          <h1 class="tweet-title text-3xl font-bold text-skin-accent mb-4">
+            {title || '无标题推文'}
+          </h1>
+          
+          <div class="tweet-meta space-y-2">
+            <Datetime 
+              pubDatetime={pubDatetime}
+              modDatetime={pubDatetime}
+              size="lg"
+              className="text-skin-muted"
+            />
+            <div class="flex items-center space-x-4 text-sm text-skin-muted">
+              <span>{wordCount} 字</span>
+              <span>{readingTime}</span>
+            </div>
+          </div>
+
+          {tags && tags.length > 0 && (
+            <div class="tweet-tags flex flex-wrap gap-2 mt-4">
+              {tags.map((tag: string) => (
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-skin-accent/10 text-skin-accent">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </header>
+
+        <div class="tweet-content prose prose-lg max-w-none dark:prose-invert prose-headings:text-skin-accent prose-p:text-skin-base prose-a:text-skin-accent hover:prose-a:text-skin-accent/80 prose-blockquote:border-l-skin-accent prose-code:text-skin-accent">
+          <Content />
+        </div>
+
+        <footer class="tweet-footer mt-12 pt-8 border-t border-skin-line">
+          <div class="flex justify-between items-center">
+            <a
+              href="/tweets"
+              class="group inline-flex items-center space-x-2 text-skin-accent hover:text-skin-accent/80 transition-colors"
+            >
+              <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+              <span>查看所有推文</span>
+            </a>
+            
+            <div class="text-sm text-skin-muted">
+              推文详情
+            </div>
+          </div>
+        </footer>
+      </article>
+    </main>
+  </div>
+</TweetsLayout>
+
+<style>
+  .tweet-title {
+    @apply text-2xl font-bold text-skin-accent sm:text-3xl;
+  }
+  
+  .tweet-meta {
+    @apply mb-6 flex flex-col space-y-2;
+  }
+  
+  .tweet-tags {
+    @apply flex flex-wrap gap-2;
+  }
+  
+  .tweet-content {
+    @apply prose prose-lg max-w-none dark:prose-invert
+           prose-headings:text-skin-accent 
+           prose-p:text-skin-base
+           prose-a:text-skin-accent hover:prose-a:text-skin-accent/80
+           prose-blockquote:border-l-skin-accent
+           prose-code:text-skin-accent;
+  }
+  
+  .tweet-content pre {
+    @apply bg-skin-card border border-skin-line;
+  }
+  .tweet-content p {
+    white-space: break-spaces;
+  }
+  
+  .tweet-actions {
+    @apply border-t border-skin-line pt-6;
+  }
+  
+  .tweet-navigation {
+    @apply border-t border-skin-line pt-6;
+  }
+</style>

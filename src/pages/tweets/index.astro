@@ -1,0 +1,72 @@
+---
+import { getTweetsWithMeta } from "../../utils/getTweets";
+import { paginateTweets } from "../../utils/tweetPagination";
+import TweetsLayout from "../../layouts/TweetsLayout.astro";
+import TweetGrid from "../../components/TweetGrid.tsx";
+import { SITE } from "../../config";
+
+// Get all tweets with metadata
+const tweetsWithMeta = await getTweetsWithMeta();
+
+// Paginate tweets (initial load: first 6 tweets for infinite scroll)
+const paginatedResult = paginateTweets(tweetsWithMeta, 1, 6);
+
+const pageTitle = "我的推文";
+const pageDescription = "分享快速想法和更新的地方";
+---
+
+<TweetsLayout
+  description={pageDescription}
+  activeNav="tweets"
+>
+  <main id="main-content">
+    <section id="hero">
+    </section>
+
+    <section id="tweets-content">
+      {
+        paginatedResult.tweets.length > 0 ? (
+          <TweetGrid 
+            tweets={paginatedResult.tweets}
+            pagination={paginatedResult.pagination}
+            variant="default"
+            enableInfiniteScroll={true}
+            client:load
+          />
+        ) : (
+          <div class="tweets-empty">
+            <div class="tweets-empty-icon">📝</div>
+            <h2 class="tweets-empty-title">还没有推文</h2>
+            <p class="tweets-empty-description">
+              快来分享你的第一条推文吧！
+            </p>
+          </div>
+        )
+      }
+    </section>
+  </main>
+</TweetsLayout>
+
+<style>
+  #hero {
+    @apply pb-6 pt-8;
+  }
+  #hero h1 {
+    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
+  }
+  #tweets-content {
+    @apply pb-12;
+  }
+  .tweets-empty {
+    @apply text-center py-16;
+  }
+  .tweets-empty-icon {
+    @apply text-6xl mb-4;
+  }
+  .tweets-empty-title {
+    @apply text-2xl font-bold text-skin-accent mb-3;
+  }
+  .tweets-empty-description {
+    @apply text-skin-muted text-lg;
+  }
+</style>

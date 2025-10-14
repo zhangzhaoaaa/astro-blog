@@ -25,4 +25,16 @@ const blog = defineCollection({
     }),
 });
 
-export const collections = { blog };
+const tweets = defineCollection({
+  type: "content",
+  schema: z.object({
+    pubDatetime: z.string(),
+    title: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+    featured: z.boolean().default(false),
+    sourceUrl: z.string().url(),
+  }),
+});
+
+export const collections = { blog, tweets };

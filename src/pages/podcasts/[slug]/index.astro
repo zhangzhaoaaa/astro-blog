@@ -70,13 +70,12 @@ const lastUpdatedLabel = (() => {
     <div class="flex flex-col gap-8 sm:flex-row sm:items-start">
       <div class="sm:w-64">
         <img
-          src={show.image}
+          src={pageImage}
           alt={`${show.title} cover art`}
           fetchpriority="high"
           decoding="async"
           loading="eager"
           class="aspect-square w-full rounded-xl object-cover shadow-lg"
-          onerror="this.onerror=null;this.src='/assets/podcast-placeholder.svg';"
         />
       </div>
       <div class="flex-1 space-y-4">

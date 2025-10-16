@@ -78,9 +78,8 @@ const socialImageURL = new URL(
     }
 
     <meta name="theme-color" content="" />
-    <!-- Connection hints for third-party analytics to reduce handshake cost when it loads -->
-    <link rel="preconnect" href="https://hm.baidu.com" crossorigin />
-    <link rel="dns-prefetch" href="//hm.baidu.com" />
+    <!-- Connection hint for third-party analytics to reduce handshake cost when it loads -->
+    <link rel="preconnect" href="https://hm.baidu.com" />
     {googleSiteVerification && (
       <meta name="google-site-verification" content={googleSiteVerification} />
     )}

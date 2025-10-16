@@ -22,6 +22,13 @@ const breadcrumbs = [{ label: show.title }];
 const pageTitle = `${show.title} | 我的播客`;
 const pageDescription = show.descriptionPlain.slice(0, 150) || show.description;
 const pageImage = show.image || "/assets/podcast-placeholder.svg";
+const isExternalImage = pageImage.startsWith("http://") || pageImage.startsWith("https://");
+let imageOrigin: string | undefined = undefined;
+try {
+  if (isExternalImage) {
+    imageOrigin = new URL(pageImage).origin;
+  }
+} catch {}
 const lastUpdatedLabel = (() => {
   try {
     const timestamp = new Date(show.lastBuildDate);
@@ -48,17 +55,27 @@ const lastUpdatedLabel = (() => {
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={pageImage} />
+
+    {/* Preload and connection hints for LCP image */}
+    <link rel="preload" as="image" href={pageImage} />
+    {imageOrigin && (
+      <>
+        <link rel="preconnect" href={imageOrigin} crossorigin />
+        <link rel="dns-prefetch" href={imageOrigin} />
+      </>
+    )}
   </Fragment>
 
   <section class="py-10">
     <div class="flex flex-col gap-8 sm:flex-row sm:items-start">
       <div class="sm:w-64">
         <img
-          src={show.image}
+          src={pageImage}
           alt={`${show.title} cover art`}
-          loading="lazy"
+          fetchpriority="high"
+          decoding="async"
+          loading="eager"
           class="aspect-square w-full rounded-xl object-cover shadow-lg"
-          onerror="this.onerror=null;this.src='/assets/podcast-placeholder.svg';"
         />
       </div>
       <div class="flex-1 space-y-4">
@@ -120,6 +137,6 @@ const lastUpdatedLabel = (() => {
       <div class="text-sm text-skin-base/60">共 {episodes.length} 集</div>
     </div>
 
-    <EpisodeList episodes={episodes} client:load />
+    <EpisodeList episodes={episodes} client:visible />
   </section>
 </PodcastLayout>

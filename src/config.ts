@@ -5,7 +5,8 @@ export const SITE: Site = {
   author: "zeromike",
   desc: "终身学习者",
   title: "zeromike",
-  ogImage: "favicon.png",
+  // Use the generated OG image route by default so social previews always work
+  ogImage: "og.png",
   lightAndDarkMode: true,
   postPerPage: 5,
 };

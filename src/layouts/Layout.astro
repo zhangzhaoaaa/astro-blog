@@ -78,6 +78,8 @@ const socialImageURL = new URL(
     }
 
     <meta name="theme-color" content="" />
+    <!-- Connection hint for third-party analytics to reduce handshake cost when it loads -->
+    <link rel="preconnect" href="https://hm.baidu.com" />
     {googleSiteVerification && (
       <meta name="google-site-verification" content={googleSiteVerification} />
     )}
@@ -88,14 +90,24 @@ const socialImageURL = new URL(
     <script is:inline>
       /* eslint-disable */
       (function () {
-        // third-party analytics global assignment
+        // Defer third-party analytics to outside the critical path
         // Note: using inline JS to avoid TypeScript window typing issues
-        // @ts-ignore
-        window._hmt = window._hmt || [];
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?fb635d7cb8b4f06664534bb5f62e8dd8";
-        var s = document.getElementsByTagName("script")[0];
-        s && s.parentNode && s.parentNode.insertBefore(hm, s);
+        function loadBaidu() {
+          // @ts-ignore
+          window._hmt = window._hmt || [];
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?fb635d7cb8b4f06664534bb5f62e8dd8";
+          hm.async = true;
+          var s = document.getElementsByTagName("script")[0];
+          if (s && s.parentNode) s.parentNode.insertBefore(hm, s);
+          else document.head.appendChild(hm);
+        }
+        if ("requestIdleCallback" in window) {
+          // @ts-ignore
+          requestIdleCallback(loadBaidu, { timeout: 2000 });
+        } else {
+          setTimeout(loadBaidu, 2000);
+        }
       })();
     </script>
   </head>

@@ -1,25 +1,6 @@
 import type { APIRoute } from "astro";
 import { getTweetsWithMeta } from "../../utils/getTweets";
 
-// Parse date format "2025-10-13 13:30" to Date object
-function parseDateTime(dateString: string): Date {
-  const match = dateString.match(
-    /(\d{4})-(\d{1,2})-(\d{1,2})\s+(\d{1,2}):(\d{2})/
-  );
-  if (match) {
-    const [, year, month, day, hour, minute] = match;
-    return new Date(
-      parseInt(year),
-      parseInt(month) - 1, // Month is 0-indexed
-      parseInt(day),
-      parseInt(hour),
-      parseInt(minute)
-    );
-  }
-  // Fallback: try to parse as regular date
-  return new Date(dateString);
-}
-
 export const GET: APIRoute = async ({ url }) => {
   try {
     const searchParams = new URLSearchParams(url.search);

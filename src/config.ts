@@ -26,25 +26,25 @@ export const SOCIALS: SocialObjects = [
     name: "Github",
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: ` ${SITE.title} on Github`,
-    active: true,
+    active: false,
   },
   {
     name: "Facebook",
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: `${SITE.title} on Facebook`,
-    active: true,
+    active: false,
   },
   {
     name: "Instagram",
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: `${SITE.title} on Instagram`,
-    active: true,
+    active: false,
   },
   {
     name: "LinkedIn",
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: `${SITE.title} on LinkedIn`,
-    active: true,
+    active: false,
   },
   {
     name: "Mail",
@@ -53,10 +53,10 @@ export const SOCIALS: SocialObjects = [
     active: false,
   },
   {
-    name: "Twitter",
-    href: "https://github.com/satnaing/astro-paper",
-    linkTitle: `${SITE.title} on Twitter`,
-    active: false,
+    name: "X",
+    href: "https://x.com/coolzeromike",
+    linkTitle: `${SITE.title} on X`,
+    active: true,
   },
   {
     name: "Twitch",
@@ -141,5 +141,44 @@ export const SOCIALS: SocialObjects = [
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: `${SITE.title} on Mastodon`,
     active: false,
+  },
+];
+
+// ============================================================================
+// Podcast Configuration
+// ============================================================================
+
+export interface PodcastSource {
+  name: string;
+  url: string;
+  slug: string;
+  enabled: boolean;
+}
+
+export const PODCAST_SOURCES: PodcastSource[] = [
+  // XYZ.fm podcast
+  {
+    name: "大话前端",
+    url: "https://feed.xyzfm.space/7hma33cftrav",
+    slug: "talktoweb",
+    enabled: true,
+  }, // XYZ.fm：谈谈 Web
+  {
+    name: "XYZ.fm",
+    url: "https://www.ximalaya.com/album/80628123.xml",
+    slug: "talktoenglish",
+    enabled: true,
+  },
+  {
+    name: "XYZ.fm",
+    url: "https://feed.xyzfm.space/6uhhqmb3pqrq",
+    slug: "talktoielts",
+    enabled: true,
+  }, // XYZ.fm: Talk about IELTS
+  {
+    name: "XYZ.fm",
+    url: "https://feed.xyzfm.space/64ddvxpp9uq3",
+    slug: "brokenmouth",
+    enabled: true,
   },
 ];

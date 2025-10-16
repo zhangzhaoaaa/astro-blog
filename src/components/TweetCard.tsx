@@ -1,7 +1,6 @@
 import React from "react";
 import {
   ClockIcon,
-  DocumentTextIcon,
   ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/outline";
 
@@ -23,7 +22,6 @@ export interface TweetCardProps {
 
 const TweetCard: React.FC<TweetCardProps> = ({
   tweet,
-  showActions = true,
   variant = "default",
 }) => {
   const formatDate = (dateString: string) => {

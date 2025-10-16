@@ -13,9 +13,11 @@ const paginatedResult = paginateTweets(tweetsWithMeta, 1, 6);
 
 const pageTitle = "我的推文";
 const pageDescription = "分享快速想法和更新的地方";
+const heroDescription = `${SITE.author} 在 ${SITE.title} 上的小记与灵感速记。`;
 ---
 
 <TweetsLayout
+  title={pageTitle}
   description={pageDescription}
   activeNav="tweets"
 >

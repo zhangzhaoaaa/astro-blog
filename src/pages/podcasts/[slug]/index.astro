@@ -1,0 +1,125 @@
+---
+import PodcastLayout from "@layouts/PodcastLayout.astro";
+import Hr from "@components/Hr.astro";
+import EpisodeList from "@components/podcast/EpisodeList";
+import { getPodcastBySlug, getEpisodesByShow } from "@utils/getPodcasts";
+import type { PodcastShow, PodcastEpisode } from "../../../types";
+
+const slugParam = Astro.params.slug;
+if (typeof slugParam !== "string" || !slugParam) {
+  return Astro.redirect("/404");
+}
+
+const show = (await getPodcastBySlug(slugParam)) as PodcastShow | undefined;
+
+if (!show) {
+  return Astro.redirect("/404");
+}
+
+const episodes = (await getEpisodesByShow(slugParam)) as PodcastEpisode[];
+const breadcrumbs = [{ label: show.title }];
+
+const pageTitle = `${show.title} | 我的播客`;
+const pageDescription = show.descriptionPlain.slice(0, 150) || show.description;
+const pageImage = show.image || "/assets/podcast-placeholder.svg";
+const lastUpdatedLabel = (() => {
+  try {
+    const timestamp = new Date(show.lastBuildDate);
+    if (Number.isNaN(timestamp.getTime())) return "最近更新：未知";
+    return `最近更新：${new Intl.DateTimeFormat("zh-CN", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }).format(timestamp)}`;
+  } catch (error) {
+    console.error("[Podcast Detail] Failed to format lastBuildDate", error);
+    return "最近更新：未知";
+  }
+})();
+---
+
+<PodcastLayout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <Fragment slot="head">
+    <meta name="description" content={pageDescription} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={pageImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={pageImage} />
+  </Fragment>
+
+  <section class="py-10">
+    <div class="flex flex-col gap-8 sm:flex-row sm:items-start">
+      <div class="sm:w-64">
+        <img
+          src={show.image}
+          alt={`${show.title} cover art`}
+          loading="lazy"
+          class="aspect-square w-full rounded-xl object-cover shadow-lg"
+          onerror="this.onerror=null;this.src='/assets/podcast-placeholder.svg';"
+        />
+      </div>
+      <div class="flex-1 space-y-4">
+        <div>
+          <h1 class="text-3xl font-bold text-skin-accent sm:text-4xl">{show.title}</h1>
+          <p class="mt-2 text-base text-skin-base/70">{show.author}</p>
+        </div>
+
+        <div class="flex flex-wrap gap-3 text-sm text-skin-base/70">
+          <span class="inline-flex items-center gap-2 rounded-full bg-skin-card-muted px-3 py-1">
+            集数 {show.episodeCount}
+          </span>
+          {show.language && (
+            <span class="inline-flex items-center gap-2 rounded-full bg-skin-card-muted px-3 py-1">
+              语言 {show.language}
+            </span>
+          )}
+          {show.explicit && (
+            <span class="inline-flex items-center gap-2 rounded-full bg-red-500/15 px-3 py-1 text-red-500 dark:bg-red-500/10">
+              Explicit
+            </span>
+          )}
+        </div>
+
+        <div class="prose max-w-none text-skin-base/80 prose-a:text-skin-accent hover:prose-a:underline dark:prose-invert" set:html={show.description}></div>
+
+        {show.link && (
+          <a
+            href={show.link}
+            target="_blank"
+            rel="noreferrer noopener"
+            class="inline-flex items-center gap-2 rounded border border-skin-line px-4 py-2 text-sm text-skin-accent transition hover:border-skin-accent"
+          >
+            访问官网
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h4m0 0v4m0-4L10 14m4-4H7" />
+            </svg>
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <Hr />
+
+  <section class="py-10">
+    <div class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h2 class="text-2xl font-semibold text-skin-accent">全部剧集</h2>
+        <p class="text-sm text-skin-base/60">{lastUpdatedLabel}</p>
+      </div>
+      <div class="text-sm text-skin-base/60">共 {episodes.length} 集</div>
+    </div>
+
+    <EpisodeList episodes={episodes} client:load />
+  </section>
+</PodcastLayout>

@@ -1,30 +1,28 @@
 import type { APIRoute } from "astro";
 import { getTweetsWithMeta } from "../../utils/getTweets";
 
-// Parse date format "2025-10-13 13:30" to Date object
-function parseDateTime(dateString: string): Date {
-  const match = dateString.match(
-    /(\d{4})-(\d{1,2})-(\d{1,2})\s+(\d{1,2}):(\d{2})/
-  );
-  if (match) {
-    const [, year, month, day, hour, minute] = match;
-    return new Date(
-      parseInt(year),
-      parseInt(month) - 1, // Month is 0-indexed
-      parseInt(day),
-      parseInt(hour),
-      parseInt(minute)
-    );
-  }
-  // Fallback: try to parse as regular date
-  return new Date(dateString);
-}
+// Pagination defaults and guards
+const DEFAULT_LIMIT = 6; // Reasonable page size default
+const MAX_LIMIT = 100; // Hard cap to prevent large requests
 
 export const GET: APIRoute = async ({ url }) => {
   try {
     const searchParams = new URLSearchParams(url.search);
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "6");
+    // Parse and validate page
+    const rawPage = searchParams.get("page");
+    let page = Number.parseInt(rawPage ?? "", 10);
+    if (Number.isNaN(page) || page <= 0) {
+      page = 1;
+    }
+
+    // Parse, validate, and clamp limit
+    const rawLimit = searchParams.get("limit");
+    let limit = Number.parseInt(rawLimit ?? "", 10);
+    if (Number.isNaN(limit) || limit <= 0) {
+      limit = DEFAULT_LIMIT;
+    }
+    // Enforce maximum limit to avoid heavy queries
+    limit = Math.min(limit, MAX_LIMIT);
 
     // Get all tweets
     const allTweets = await getTweetsWithMeta();

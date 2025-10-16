@@ -1,7 +1,6 @@
 import React from "react";
 import {
   ClockIcon,
-  DocumentTextIcon,
   ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/outline";
 
@@ -23,7 +22,6 @@ export interface TweetCardProps {
 
 const TweetCard: React.FC<TweetCardProps> = ({
   tweet,
-  showActions = true,
   variant = "default",
 }) => {
   const formatDate = (dateString: string) => {
@@ -38,16 +36,15 @@ const TweetCard: React.FC<TweetCardProps> = ({
     );
     if (match) {
       const [, year, month, day, hour, minute] = match;
-      const date = new Date(
-        parseInt(year),
-        parseInt(month) - 1,
-        parseInt(day),
-        parseInt(hour),
-        parseInt(minute)
-      );
-      return date.toISOString();
+      // Parse as UTC to avoid timezone shifts
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(
+        2,
+        "0"
+      )}T${hour.padStart(2, "0")}:${minute}:00.000Z`;
     }
-    return new Date().toISOString(); // fallback
+    // Throw or log error instead of silent fallback
+    console.error("Invalid date format:", dateString);
+    return new Date().toISOString();
   };
 
   const cardClasses = [

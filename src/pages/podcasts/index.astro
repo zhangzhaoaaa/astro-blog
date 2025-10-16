@@ -1,0 +1,156 @@
+---
+/**
+ * Podcast List Page
+ * 
+ * Displays all podcast shows from configured RSS feeds
+ * Fetches data at build time for static generation
+ */
+
+import Layout from "@layouts/Layout.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Hr from "@components/Hr.astro";
+import PodcastCard from "@components/podcast/PodcastCard";
+import { getAllPodcasts } from "@utils/getPodcasts";
+import type { PodcastShow } from "../../types";
+
+// Fetch all podcasts at build time
+let shows: PodcastShow[] = [];
+let hasError = false;
+
+try {
+  shows = await getAllPodcasts();
+  console.log(`[Podcasts Page] Fetched ${shows} shows`);
+} catch (error) {
+  console.error("[Podcasts Page] Failed to fetch podcasts:", error);
+  hasError = true;
+}
+
+const pageTitle = "我的播客";
+const pageDesc = "探索和收听精选播客节目";
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <Header activeNav="podcasts" />
+  
+  <main id="main-content" class="mx-auto w-full max-w-5xl px-4 pb-12">
+
+    <Hr />
+
+    {/* Error Banner */}
+    {hasError && (
+      <div class="my-8 rounded-lg border-2 border-red-500/20 bg-red-500/10 p-6 text-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mx-auto mb-4 h-12 w-12 text-red-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <h2 class="mb-2 text-xl font-semibold text-red-500">加载播客失败</h2>
+        <p class="text-red-500/80">
+          无法获取RSS订阅源，请稍后重试或检查网络连接。
+        </p>
+
+      </div>
+    )}
+
+    {/* Empty State */}
+    {!hasError && shows.length === 0 && (
+      <div class="my-12 text-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mx-auto mb-4 h-16 w-16 text-skin-base opacity-40"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+          />
+        </svg>
+        <h2 class="mb-2 text-2xl font-semibold text-skin-base opacity-60">
+          暂无播客节目
+        </h2>
+        <p class="text-skin-base opacity-50">
+          还没有配置RSS订阅源，请在配置文件中添加播客源。
+        </p>
+      </div>
+    )}
+
+    {/* Podcast Grid */}
+    {!hasError && shows.length > 0 && (
+      <section class="py-8">
+        <div class="mb-6 text-sm text-skin-base opacity-60">
+          共 {shows.length} 个播客节目
+        </div>
+        
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {shows.map((show) => (
+            <PodcastCard show={show} client:load />
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* Additional Info */}
+    {!hasError && shows.length > 0 && (
+      <section class="mt-12 rounded-lg border border-skin-line bg-skin-card p-6">
+        <h2 class="mb-3 text-lg font-semibold text-skin-accent">
+          💡 使用提示
+        </h2>
+        <ul class="space-y-2 text-sm text-skin-base opacity-80">
+          <li class="flex items-start gap-2">
+            <span class="mt-0.5">•</span>
+            <span>点击播客卡片查看完整节目列表</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="mt-0.5">•</span>
+            <span>可前往各播客平台收听原节目</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="mt-0.5">•</span>
+            <span>本页暂不提供站内播放功能</span>
+          </li>
+        </ul>
+      </section>
+    )}
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Custom styles for podcast grid animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .grid > * {
+    animation: fadeInUp 0.3s ease-out backwards;
+  }
+
+  .grid > *:nth-child(1) { animation-delay: 0.05s; }
+  .grid > *:nth-child(2) { animation-delay: 0.1s; }
+  .grid > *:nth-child(3) { animation-delay: 0.15s; }
+  .grid > *:nth-child(4) { animation-delay: 0.2s; }
+  .grid > *:nth-child(5) { animation-delay: 0.25s; }
+  .grid > *:nth-child(6) { animation-delay: 0.3s; }
+</style>

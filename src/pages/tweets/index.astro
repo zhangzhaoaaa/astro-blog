@@ -13,9 +13,11 @@ const paginatedResult = paginateTweets(tweetsWithMeta, 1, 6);
 
 const pageTitle = "我的推文";
 const pageDescription = "分享快速想法和更新的地方";
+const heroDescription = `${SITE.author} 在 ${SITE.title} 上的小记与灵感速记。`;
 ---
 
 <TweetsLayout
+  title={pageTitle}
   description={pageDescription}
   activeNav="tweets"
 >
@@ -51,8 +53,11 @@ const pageDescription = "分享快速想法和更新的地方";
   #hero {
     @apply pb-6 pt-8;
   }
-  #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
+  #hero {
+    @apply pb-6 pt-8;
+  }
+  #tweets-content {
+    @apply pb-12;
   }
   #tweets-content {
     @apply pb-12;

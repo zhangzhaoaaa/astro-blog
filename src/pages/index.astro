@@ -33,9 +33,35 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           关于我
         </LinkButton> 更多了解我。
       </p>
+      {socialCount > 0 && (
+        <div class="social-wrapper">
+          <span class="social-links">
+            在 {socialCount} 个平台找到我：
+          </span>
+          <Socials centered />
+        </div>
+      )}
     </section>
 
     <Hr />
+
+    {featuredPosts.length ? (
+      <>
+        <section id="featured">
+          <h2>精选文章</h2>
+          <ul>
+            {featuredPosts.slice(0, 3).map(({ data, slug }) => (
+              <Card
+                href={`/posts/${slug}`}
+                frontmatter={data}
+                secHeading={false}
+              />
+            ))}
+          </ul>
+        </section>
+        <Hr />
+      </>
+    ) : null}
 
     <section id="recent-posts">
       <h2>最近文章</h2>

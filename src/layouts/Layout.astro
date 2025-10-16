@@ -2,6 +2,7 @@
 import { LOCALE, SITE } from "@config";
 import "@styles/base.css";
 import { ViewTransitions } from "astro:transitions";
+// AudioPlayer temporarily removed
 
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
@@ -35,7 +36,7 @@ const socialImageURL = new URL(
 
 <!doctype html>
 <html
-  lang=`${LOCALE.lang ?? "en"}`
+  lang={LOCALE.lang ?? "en"}
   class={`${scrollSmooth && "scroll-smooth"}`}
 >
   <head>
@@ -77,21 +78,29 @@ const socialImageURL = new URL(
     }
 
     <meta name="theme-color" content="" />
+    {googleSiteVerification && (
+      <meta name="google-site-verification" content={googleSiteVerification} />
+    )}
 
     <ViewTransitions />
 
     <script is:inline src="/toggle-theme.js"></script>
-    <script>
-      var _hmt: any = _hmt || [];
+    <script is:inline>
+      /* eslint-disable */
       (function () {
+        // third-party analytics global assignment
+        // Note: using inline JS to avoid TypeScript window typing issues
+        // @ts-ignore
+        window._hmt = window._hmt || [];
         var hm = document.createElement("script");
         hm.src = "https://hm.baidu.com/hm.js?fb635d7cb8b4f06664534bb5f62e8dd8";
         var s = document.getElementsByTagName("script")[0];
-        s?.parentNode?.insertBefore(hm, s);
+        s && s.parentNode && s.parentNode.insertBefore(hm, s);
       })();
     </script>
   </head>
   <body>
     <slot />
+    <!-- AudioPlayer temporarily removed -->
   </body>
 </html>

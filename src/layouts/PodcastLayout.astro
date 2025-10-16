@@ -51,7 +51,7 @@ const { title, description, breadcrumbs = [] } = Astro.props;
                   {crumb.label}
                 </a>
               ) : (
-                <span class="font-medium text-skin-accent opacity-100">
+                <span class="font-medium text-skin-accent opacity-100" aria-current="page">
                   {crumb.label}
                 </span>
               )}

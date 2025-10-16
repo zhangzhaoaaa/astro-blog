@@ -36,6 +36,11 @@ pnpm-debug.log*
 .vercel/
 .vercel
 specs/
-.github/
+specs/
+.github/local-config/
 .vscode/
 .specify/
+.vscode/
+.specify/
+.github/
+.vscode/

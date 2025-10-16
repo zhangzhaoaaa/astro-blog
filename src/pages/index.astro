@@ -33,12 +33,14 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           关于我
         </LinkButton> 更多了解我。
       </p>
-      <div class="social-wrapper">
-        <span class="social-links">
-          在 {socialCount} 个平台找到我：
-        </span>
-        <Socials centered />
-      </div>
+      {socialCount > 0 && (
+        <div class="social-wrapper">
+          <span class="social-links">
+            在 {socialCount} 个平台找到我：
+          </span>
+          <Socials centered />
+        </div>
+      )}
     </section>
 
     <Hr />

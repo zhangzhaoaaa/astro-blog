@@ -67,13 +67,10 @@ export async function getTweetsWithMeta(): Promise<TweetWithMeta[]> {
 
   return tweets.map(tweet => {
     const content = tweet.body || "";
-    const wordCount = content.trim().split(/\s+/).length;
+    const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
     const readingTime = Math.max(1, Math.ceil(wordCount / 200)); // 200 words per minute
-    // const excerpt = content.length > 300
-    //   ? content.substring(0, 300).trim() + "..."
-    //   : content;
-
-    const excerpt = content;
+    const excerpt =
+      content.length > 300 ? content.substring(0, 300).trim() + "..." : content;
 
     return {
       ...tweet,

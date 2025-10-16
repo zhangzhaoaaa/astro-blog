@@ -44,15 +44,15 @@ const TweetGrid: React.FC<TweetGridProps> = ({
     setError(null);
 
     try {
-      const response = await fetch(
+      const res = await fetch(
         `/api/tweets.json?page=${pagination.currentPage + 1}&limit=6`
       );
 
-      if (!response.ok) {
+      if (!res.ok) {
         throw new Error("Failed to load tweets");
       }
 
-      const data = await response.json();
+      const data = await res.json();
 
       setTweets(prev => [...prev, ...data.tweets]);
       setPagination(data.pagination);
@@ -117,10 +117,10 @@ const TweetGrid: React.FC<TweetGridProps> = ({
       <div className={gridClasses}>
         {tweets.map((tweet, index) => (
           <div
-            key={`${tweet.slug}-${index}`}
+            key={tweet.slug}
             className="tweet-enter"
             style={{
-              animationDelay: `${index * 0.1}s`,
+              animationDelay: `${Math.min(index, 10) * 0.1}s`,
             }}
           >
             <TweetCard

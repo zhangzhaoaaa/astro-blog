@@ -61,8 +61,8 @@ export function transformFeedToShow(
       .toString()
       .toLowerCase() === "yes";
 
-  // 打印feed日志
-  console.log(`[RSS Fetcher] Processing feed: ${JSON.stringify(feed)}`);
+  // Log minimal feed metadata for debugging
+  console.log(`[RSS Fetcher] Processing feed: ${feed.title || "Untitled"}`);
 
   // Get categories - iTunes categories can be nested
   const categories: string[] = [];

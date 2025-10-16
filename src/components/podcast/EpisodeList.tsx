@@ -40,7 +40,7 @@ export default function EpisodeList({ episodes }: EpisodeListProps) {
     const handleScroll = () => {
       if (typeof window === "undefined") return;
       const { scrollY, innerHeight } = window;
-      const { scrollHeight } = document.body;
+      const { scrollHeight } = document.documentElement;
       const distanceToBottom = scrollHeight - (scrollY + innerHeight);
 
       if (distanceToBottom < LOAD_THRESHOLD_PX) {

@@ -29,6 +29,15 @@ const parser = new Parser({
       "enclosures",
     ],
   },
+  // Provide browser-like headers to reduce provider 406 responses on parseURL
+  requestOptions: {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36",
+      Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
+      "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+    },
+  },
 } as any);
 
 export type ParsedFeed = any;
@@ -46,9 +55,9 @@ export async function parseRSSFeed(url: string): Promise<ParsedFeed | null> {
   } catch (error) {
     // Some providers (e.g., Ximalaya) reject default requests with 406.
     // Fallback: fetch XML with browser-like headers and parse from string.
+    const msg = error instanceof Error ? error.message : String(error);
     console.warn(
-      `[RSS Parser] parseURL failed for ${url}. Falling back to manual fetch...`,
-      error
+      `[RSS Parser] parseURL issue for ${url}: ${msg}. Using manual fetch...`
     );
     try {
       const headers: Record<string, string> = {
@@ -71,11 +80,15 @@ export async function parseRSSFeed(url: string): Promise<ParsedFeed | null> {
       }
       const xml = await res.text();
       const feed = await (parser as any).parseString(xml);
+      console.info(`[RSS Parser] Fallback fetch succeeded for ${url}`);
       return feed;
     } catch (fallbackErr) {
+      const fallbackMsg =
+        fallbackErr instanceof Error
+          ? fallbackErr.message
+          : String(fallbackErr);
       console.error(
-        `[RSS Parser] Fallback fetch failed for: ${url}`,
-        fallbackErr
+        `[RSS Parser] Fallback fetch failed for: ${url} -> ${fallbackMsg}`
       );
       return null;
     }

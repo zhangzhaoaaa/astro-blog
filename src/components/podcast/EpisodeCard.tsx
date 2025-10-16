@@ -19,7 +19,7 @@ function formatDuration(duration?: number): string {
   if (duration === undefined) return "--:--";
   const hours = Math.floor(duration / 3600);
   const minutes = Math.floor((duration % 3600) / 60);
-  const seconds = duration % 60;
+  const seconds = Math.floor(duration % 60);
 
   const pad = (value: number) => value.toString().padStart(2, "0");
   if (hours > 0) {

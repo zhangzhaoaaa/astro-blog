@@ -51,7 +51,11 @@ export default defineConfig({
   },
   vite: {
     optimizeDeps: {
-      exclude: ["@resvg/resvg-js"],
+      exclude: ["@resvg/resvg-js", "quicklink", "@divriots/jampack"],
+      include: ["react", "react-dom"],
+    },
+    resolve: {
+      dedupe: ["react", "react-dom"],
     },
   },
   output: "server",

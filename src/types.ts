@@ -12,7 +12,7 @@ const RelativeOrAbsoluteUrlSchema = z
     } catch {
       return false;
     }
-  }, "Must be a valid URL or absolute path");
+  }, "Must be a valid URL or path starting with /");
 
 export type Site = {
   website: string;
@@ -37,7 +37,7 @@ export type SocialObjects = {
 
 export const PodcastShowSchema = z.object({
   // Identity
-  slug: z.string(),
+  slug: z.string().min(1),
   title: z.string().min(1).max(200),
   rssFeedUrl: z.string().url(),
 
@@ -52,7 +52,7 @@ export const PodcastShowSchema = z.object({
   imageLocal: z.string().optional(),
 
   // Attribution
-  author: z.string(),
+  author: z.string().min(1),
   copyright: z.string().optional(),
 
   // Classification

@@ -16,8 +16,9 @@ function parseDateTime(dateString: string): Date {
       parseInt(minute)
     );
   }
-  // Fallback: try to parse as regular date
-  return new Date(dateString);
+  // Invalid format - return current date as fallback
+  console.warn(`Unable to parse date: ${dateString}`);
+  return new Date();
 }
 
 export const GET: APIRoute = async () => {

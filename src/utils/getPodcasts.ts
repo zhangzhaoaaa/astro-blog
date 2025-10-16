@@ -114,9 +114,9 @@ export async function searchPodcasts(query: string): Promise<{
   // Search shows
   const matchingShows = shows.filter(
     show =>
-      show.title.toLowerCase().includes(lowerQuery) ||
-      show.descriptionPlain.toLowerCase().includes(lowerQuery) ||
-      show.author.toLowerCase().includes(lowerQuery)
+      (show.title || "").toLowerCase().includes(lowerQuery) ||
+      (show.descriptionPlain || "").toLowerCase().includes(lowerQuery) ||
+      (show.author || "").toLowerCase().includes(lowerQuery)
   );
 
   // Search episodes across all shows
@@ -128,8 +128,8 @@ export async function searchPodcasts(query: string): Promise<{
 
   const matchingEpisodes = allEpisodes.filter(
     episode =>
-      episode.title.toLowerCase().includes(lowerQuery) ||
-      episode.descriptionPlain.toLowerCase().includes(lowerQuery)
+      (episode.title || "").toLowerCase().includes(lowerQuery) ||
+      (episode.descriptionPlain || "").toLowerCase().includes(lowerQuery)
   );
 
   return {

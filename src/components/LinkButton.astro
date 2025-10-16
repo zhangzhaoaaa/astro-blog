@@ -29,7 +29,7 @@ const { href, className, ariaLabel, title, disabled = false, target, rel } = Ast
       aria-label={ariaLabel}
       title={title}
       target={target}
-      rel={rel || (target === "_blank" ? "noopener noreferrer" : undefined)}
+      rel={target === "_blank" ? `${rel ? rel + " " : ""}noopener noreferrer` : rel}
     >
       <slot />
     </a>

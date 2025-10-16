@@ -24,10 +24,12 @@ export function paginateTweets(
 ): PaginatedTweets {
   const totalCount = tweets.length;
   const totalPages = Math.ceil(totalCount / pageSize);
-  const currentPage = Math.max(1, Math.min(page, totalPages));
+  const currentPage =
+    totalPages === 0 ? 0 : Math.max(1, Math.min(page, totalPages));
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
+
   const paginatedTweets = tweets.slice(startIndex, endIndex);
 
   return {

@@ -87,7 +87,7 @@
 
 /* Featured Tweet Styles */
 .tweet-card.featured {
-  @apply border-skin-accent/50 bg-gradient-to-br from-skin-card to-skin-accent/5;
+  @apply relative border-skin-accent/50 bg-gradient-to-br from-skin-card to-skin-accent/5;
 }
 
 .tweet-card.featured::before {

@@ -34,8 +34,11 @@ const { title, pubDatetime, tags } = tweet.data;
 
 const { Content } = await tweet.render();
 
-// Calculate reading stats from tweet body
-const wordCount = tweet.body.split(/\s+/).length;
+// Calculate reading stats from tweet body (robust for empty/whitespace-only)
+const trimmedBody = (tweet.body || "").trim();
+const wordCount = trimmedBody === ""
+  ? 0
+  : trimmedBody.split(/\s+/).filter(Boolean).length;
 const readingTime = `${Math.ceil(wordCount / 200)} 分钟阅读`;
 ---
 

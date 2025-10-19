@@ -8,8 +8,8 @@
 
 import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
 import Footer from "@components/Footer.astro";
-import Hr from "@components/Hr.astro";
 import PodcastCard from "@components/podcast/PodcastCard";
 import { getAllPodcasts } from "@utils/getPodcasts";
 import type { PodcastShow } from "../../types";
@@ -32,10 +32,9 @@ const pageDesc = "探索和收听精选播客节目";
 
 <Layout title={pageTitle} description={pageDesc}>
   <Header activeNav="podcasts" />
+  <Breadcrumbs />
   
   <main id="main-content" class="mx-auto w-full max-w-5xl px-4 pb-12">
-
-    <Hr />
 
     {/* Error Banner */}
     {hasError && (

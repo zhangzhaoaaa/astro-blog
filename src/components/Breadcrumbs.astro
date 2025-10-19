@@ -16,6 +16,10 @@ if (segments.length > 0) {
         ? "文章"
         : s === "tags"
           ? "标签"
+          : s === "tweets"
+            ? "我的推文"
+            : s === "podcasts"
+              ? "我的播客"
           : s === "search"
             ? "搜索"
             : s;
@@ -23,7 +27,7 @@ if (segments.length > 0) {
   if (first === "posts") {
     // Posts index or pagination
     if (second && !isNaN(Number(second))) {
-      crumbs.push({ label: `Posts (page ${second})`, href: null });
+      crumbs.push({ label: `${mapFirstLabel(first)} (page ${second})`, href: null });
     } else {
       crumbs.push({ label: mapFirstLabel(first), href: null });
     }

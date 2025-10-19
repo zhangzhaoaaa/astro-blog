@@ -6,17 +6,26 @@ import getPagination from "@utils/getPagination";
 import getUniqueTags from "@utils/getUniqueTags";
 import { slugifyStr } from "@utils/slugify";
 
+export const prerender = false;
 // Runtime data fetching for server output
-const { tag: paramTag } = Astro.params as { tag: string };
-const tag = paramTag;
+const { tag } = Astro.params;
+
+if (!tag) {
+  return Astro.redirect("/404");
+}
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
-// Derive human-readable tag name if possible
-const slug = slugifyStr(tag as string);
-const matched = getUniqueTags(allPosts).find(t => t.tag === slug);
-const tagName: string = matched?.tagName ?? (tag as string) ?? slug;
-
+// Find posts for this tag
 const postsByTag = getPostsByTag(allPosts, tag as string);
+
+if (postsByTag.length === 0) {
+  return Astro.redirect("/404");
+}
+
+// Derive a human-readable tag name from taxonomy if available
+const tagSlug = slugifyStr(tag as string);
+const matched = getUniqueTags(allPosts).find((t) => t.tag === tagSlug);
+const tagName: string = matched?.tagName ?? (tag as string);
 
 const pagination = getPagination({ posts: postsByTag, page: 1, isIndex: true });
 ---

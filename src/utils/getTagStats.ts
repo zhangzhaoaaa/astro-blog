@@ -15,7 +15,10 @@ export const getTagStats = (posts: CollectionEntry<"blog">[]): TagStat[] => {
 
   for (const post of posts) {
     if (post.data.draft) continue;
-    const uniqueTags = Array.from(new Set(post.data.tags || []));
+    const cleaned = (post.data.tags || [])
+      .map(t => (typeof t === "string" ? t.trim() : ""))
+      .filter(t => t.length > 0);
+    const uniqueTags = Array.from(new Set(cleaned));
     for (const t of uniqueTags) {
       const slug = slugifyStr(t);
       const prev = counts.get(slug);

@@ -6,6 +6,8 @@ import getPostsByTag from "@utils/getPostsByTag";
 import getPagination from "@utils/getPagination";
 import { slugifyStr } from "@utils/slugify";
 
+export const prerender = false;
+
 const { page, tag } = Astro.params as { page: string; tag: string };
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);

@@ -47,7 +47,7 @@ const safeTagName =
     {currentPage}
     {totalPages}
     prevUrl={`/tags/${tagSlug}${
-      currentPage - 1 !== 1 ? "/" + (currentPage - 1) : ""
+      currentPage > 2 ? "/" + (currentPage - 1) : ""
     }`}
     nextUrl={`/tags/${tagSlug}/${currentPage + 1}`}
   />

@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 import TweetsLayout from "../../../layouts/TweetsLayout.astro";
 import Datetime from "../../../components/Datetime.tsx";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 
 export interface Props {
   tweet: CollectionEntry<"tweets">;
@@ -47,6 +48,7 @@ const readingTime = `${Math.ceil(wordCount / 200)} 分钟阅读`;
   description={title || '推文详情'}
   activeNav="tweets"
 >
+  <Breadcrumbs />
   <div class="max-w-4xl mx-auto px-4 py-8">
     <div class="mb-8">
       <button

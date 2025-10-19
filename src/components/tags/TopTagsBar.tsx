@@ -1,4 +1,5 @@
 import React from "react";
+import { navigate } from "astro:transitions/client";
 import {
   BarChart,
   Bar,
@@ -66,7 +67,7 @@ const TopTagsBar: React.FC<TopTagsBarProps> = ({ data, topN = 10 }) => {
             dataKey="count"
             radius={[4, 4, 4, 4]}
             onClick={(e: any) => {
-              if (e?.tag) window.location.href = `/tags/${e.tag}`;
+              if (e?.tag) navigate(`/tags/${e.tag}`);
             }}
           >
             {top.map((entry, index) => (

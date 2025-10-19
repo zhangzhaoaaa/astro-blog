@@ -2,8 +2,9 @@
 import { getTweetsWithMeta } from "../../utils/getTweets";
 import { paginateTweets } from "../../utils/tweetPagination";
 import TweetsLayout from "../../layouts/TweetsLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import TweetGrid from "../../components/TweetGrid.tsx";
-import { SITE } from "../../config";
+// import { SITE } from "../../config";
 
 // Get all tweets with metadata
 const tweetsWithMeta = await getTweetsWithMeta();
@@ -13,7 +14,7 @@ const paginatedResult = paginateTweets(tweetsWithMeta, 1, 6);
 
 const pageTitle = "我的推文";
 const pageDescription = "分享快速想法和更新的地方";
-const heroDescription = `${SITE.author} 在 ${SITE.title} 上的小记与灵感速记。`;
+// Removed hero description per request
 ---
 
 <TweetsLayout
@@ -21,9 +22,9 @@ const heroDescription = `${SITE.author} 在 ${SITE.title} 上的小记与灵感�
   description={pageDescription}
   activeNav="tweets"
 >
+  <Breadcrumbs />
   <main id="main-content">
     <section id="hero">
-      <p class="text-skin-muted">{heroDescription}</p>
     </section>
 
     <section id="tweets-content">

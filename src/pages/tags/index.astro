@@ -4,21 +4,50 @@ import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
-import Tag from "@components/Tag.astro";
-import getUniqueTags from "@utils/getUniqueTags";
 import { SITE } from "@config";
+import TopTagsBar from "@components/tags/TopTagsBar";
+import getTagStats from "@utils/getTagStats";
 
-const posts = await getCollection("blog");
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+const stats = getTagStats(posts);
 
-let tags = getUniqueTags(posts);
+// For CSS weight mapping
+const maxCount = stats.length ? Math.max(...stats.map(s => s.count)) : 1;
+const minCount = stats.length ? Math.min(...stats.map(s => s.count)) : 0;
+const range = Math.max(1, maxCount - minCount);
 ---
 
-<Layout title={`Tags | ${SITE.title}`}>
+<Layout title={`标签 | ${SITE.title}`} description={`${SITE.title} 的标签索引与使用统计，快速发现热门主题与所有标签。`}>
   <Header activeNav="tags" />
   <Main>
-    <ul>
-      {tags.map(({ tag }) => <Tag {tag} size="lg" />)}
-    </ul>
+    <section class="mb-6">
+      <h3 class="text-lg font-semibold mb-2">热门标签 Top 10</h3>
+  <TopTagsBar client:idle data={stats} topN={10} />
+    </section>
+
+    <section>
+      <h3 class="text-lg font-semibold mb-2">全部标签</h3>
+      <ul class="flex flex-wrap gap-3">
+        {
+          stats.map(({ tag, tagName, count }) => {
+            const weight = 0.9 + 1.1 * ((count - minCount) / range); // 0.9rem ~ 2.0rem
+            return (
+              <li class="leading-6">
+                <a href={`/tags/${tag}`} aria-label={`标签 ${tagName}（${count} 篇）`} class="group inline-flex items-baseline gap-1 transition-transform hover:scale-[1.02]">
+                  <span style={`font-size:${weight.toFixed(2)}rem`} class="hover:underline underline-offset-2 decoration-skin-accent">{tagName}</span>
+                  <span class="px-1.5 py-0.5 text-xs rounded bg-skin-muted text-skin-base opacity-80 group-hover:opacity-100">{count}</span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </section>
   </Main>
   <Footer />
 </Layout>
+<style>
+  .bg-skin-muted {
+    @apply bg-skin-fill;
+  }
+</style>

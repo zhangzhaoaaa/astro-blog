@@ -28,7 +28,9 @@ try {
   if (isExternalImage) {
     imageOrigin = new URL(pageImage).origin;
   }
-} catch {}
+} catch (e) {
+  console.warn("[Podcast Detail] Invalid pageImage URL:", pageImage, e);
+}
 const lastUpdatedLabel = (() => {
   try {
     const timestamp = new Date(show.lastBuildDate);

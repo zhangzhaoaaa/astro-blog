@@ -5,7 +5,7 @@
 ### Create Blog Template
 - Name: npm run blog
 - Behavior: Create a new Markdown file at src/content/blog/
-- Default filename: blog.md (dedupe to blog-1.md, blog-2.md … if exists)
+- Default filename: slug(title).md if title provided, otherwise blog.md (dedupe to -1, -2 … if exists)
 - Output: absolute path printed to stdout
 - Params (optional):
   - --title "..."
@@ -17,7 +17,7 @@
 ### Create Twitter Template
 - Name: npm run twitter
 - Behavior: Create a new Markdown file at src/content/tweets/
-- Default filename: twitter.md (dedupe to twitter-1.md, twitter-2.md … if exists)
+- Default filename: twitter.md (dedupe to twitter-1.md, twitter-2.md … if exists); filename does not include date, date is inside frontmatter (pubDatetime)
 - Output: absolute path printed to stdout
 - Params (optional):
   - --title "..."

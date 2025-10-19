@@ -66,6 +66,8 @@
 - **FR-002**: 系统必须提供“新建推特模板”的命令，生成 Markdown 文件到推特目录，包含标准前言区与内容占位。
 - **FR-003**: 文件命名必须唯一、可读、可排序；当冲突时自动去重，禁止覆盖已有文件。
 - **FR-004**: 前言区字段必须完整，键名稳定（如 title、description、date、tags、draft 等），类型可被现有内容系统识别。
+- **FR-004.1（博客字段）**: 前言区对齐现有 blog 集合：author(默认 SITE.author)、pubDatetime(必填)、modDatetime(可选/可空)、title(必填)、featured(可选)、draft(可选)、tags(默认 ["others"])、ogImage(可选，或字符串/图片且需≥1200×630)、description(必填)、canonicalURL(可选)、minutesRead(可选)、wordCount(可选)。
+- **FR-004.2（推特字段）**: 前言区对齐现有 tweets 集合：pubDatetime(必填字符串)、title(可选)、tags(默认 [])、draft(默认 false)、featured(默认 false)、sourceUrl(必填 URL)。
 - **FR-005**: 目录路径、文件扩展名、日期格式必须一致且可配置（默认提供合理值）。
 - **FR-006**: 失败时必须给出明确错误信息与修复建议。
 - **FR-007**: 命令必须支持可选参数（如标题、描述、标签、日期、是否草稿），未提供时使用默认值。
@@ -91,8 +93,13 @@
 - 日期默认采用 `YYYY-MM-DD` 或带时间的 `YYYY-MM-DD-HH-mm` 格式，用于文件名和前言区。
 - Slug 规则与站点现有 `slugify` 一致，保证唯一性与可读性。
 
+## Clarifications
+
+### Session 2025-10-19
+
+- Q: 前言区具体字段集合与默认值是否有增补需求？ → A: 与现有 schema 对齐（博客与推特使用当前内容集合定义的字段与默认值）。
+
 ## [NEEDS CLARIFICATION]
 
-- 1) 前言区具体字段集合与默认值是否有增补需求（例如 categories、cover、ogImage）？
 - 2) 推特是否允许多段内容/图片占位与外链列表？
 - 3) 是否需要交互式命令（逐项提示）还是纯参数式？

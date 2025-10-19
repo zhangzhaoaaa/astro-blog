@@ -5,6 +5,7 @@ title: 项目出海技术探索：Logto的身份和访问配置
 slug: "logto-1"
 draft: false
 description: saas服务的登录鉴权配置
+tags: ["出海记", "SaaS", "身份认证", "Next.js", "Logto"]
 ---
 
 最近自己在通过Learning by doing 出海的技术栈和云产品，我当前在本地开发一个SAAS项目

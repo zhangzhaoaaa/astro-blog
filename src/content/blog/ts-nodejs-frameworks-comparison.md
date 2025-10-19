@@ -3,6 +3,7 @@ title: TypeScript Node.js 框架对比（NestJS、Tegg、Fastify 等）
 pubDatetime: 2025-09-20
 modDatetime: 2025-09-20
 description: 对主流 TypeScript Node.js 框架（NestJS、Tegg、Fastify、AdonisJS、LoopBack 等）在性能、架构、类型安全、生态等方面进行详细对比，结合 2025 年社区数据，给出选型建议。
+tags: ["TypeScript", "Node.js", "框架对比", "架构设计"]
 ---
 
 以下是对 NestJS、Tegg、Fastify 以及其他齐名框架（如 AdonisJS 和 LoopBack）的对比。这些框架都是适用于 TypeScript 开发的 Node.js web 框架，强调性能、模块化或企业级特性。我选择了这些因为它们在架构、类型安全和扩展性上与指定框架相似（基于 2025 年的流行度和社区反馈）。其他如 Express 或 Koa 虽然基础，但更轻量，不如这些“意见化”框架适合复杂 TS 项目。

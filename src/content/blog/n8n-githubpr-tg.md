@@ -5,6 +5,7 @@ title: 我本想n8n给我自动化提效，没想到坑得我团团转
 slug: "n8n-githubpr-tg"
 draft: false
 description: n8n 实战踩坑：GitHub PR 依赖更新提醒的落地与避坑。
+tags: ["n8n", "自动化", "DevOps", "GitHub", "Telegram"]
 ---
 
 我本想用 n8n 把自动化提效这件事一把梭，结果被 Credentials 与触发器坑了两天。

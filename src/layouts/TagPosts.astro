@@ -7,6 +7,7 @@ import Footer from "@components/Footer.astro";
 import Card from "@components/Card";
 import Pagination from "@components/Pagination.astro";
 import { SITE } from "@config";
+import { slugifyStr } from "@utils/slugify";
 
 export interface Props {
   currentPage: number;
@@ -17,11 +18,22 @@ export interface Props {
 }
 
 const { currentPage, totalPages, paginatedPosts, tag, tagName } = Astro.props;
----
 
-<Layout title={`标签: ${tagName} | ${SITE.title}`}>
+// Derive a safe, human-readable tag name:
+// 1) Prefer provided tagName prop
+// 2) Else, find the first matching original tag from posts whose slug matches the URL slug
+// 3) Fallback to using the slug itself
+const tagSlug = slugifyStr(tag);
+const safeTagName =
+  tagName ??
+  paginatedPosts
+    .flatMap(post => post.data.tags)
+    .find(t => slugifyStr(t) === tagSlug) ??
+  tag;
+---
+<Layout title={`标签: ${safeTagName} | ${SITE.title}`}>
   <Header activeNav="tags" />
-  <Main pageTitle={[`标签:`, `${tagName}`]} titleTransition={tag}>
+  <Main pageTitle={[`标签:`, safeTagName]} titleTransition={tag}>
     <ul>
       {
         paginatedPosts.map(({ data, slug }) => (
@@ -34,10 +46,10 @@ const { currentPage, totalPages, paginatedPosts, tag, tagName } = Astro.props;
   <Pagination
     {currentPage}
     {totalPages}
-    prevUrl={`/tags/${tag}${
+    prevUrl={`/tags/${tagSlug}${
       currentPage - 1 !== 1 ? "/" + (currentPage - 1) : ""
     }`}
-    nextUrl={`/tags/${tag}/${currentPage + 1}`}
+    nextUrl={`/tags/${tagSlug}/${currentPage + 1}`}
   />
 
   <Footer noMarginTop={totalPages > 1} />

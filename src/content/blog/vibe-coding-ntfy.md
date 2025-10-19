@@ -2,6 +2,7 @@
 title: 电脑vibe coding了，你去刷手机了，谁call你回来继续coding
 pubDatetime: 2025-08-31T03:52:01.009Z
 description: ""
+tags: ["效率工具", "vibe coding", "通知提醒", "ntfy"]
 ---
 
 我平常使用trae做vibe coding，因为模型分析的比较慢，不想一直盯着它执行，就会老想去刷刷手机，但是刷着刷着时间就过去了，很浪费时间。我需要在自己刷手机的时候，任务执行完成，给我的手机push个notification，提醒任务完成了需要我回去继续干活了。

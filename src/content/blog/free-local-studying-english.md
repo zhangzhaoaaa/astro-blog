@@ -5,6 +5,7 @@ title: local first的免费AI英语学习方式
 slug: "free-local-studying-english"
 draft: false
 description: 本地优先的免费AI英语学习方式
+tags: ["英语学习", "AI应用", "学习方法", "retelling"]
 ---
 
 核心概念是retelling，简单来说是input-process-output，它不是简单的shadowing去mimic别人的东西，而是真正的thinking english in mind，通过英文内容的输入用自己的脑子思考总结后表达出来的过程，感觉也算是费曼学习法，大道至简，殊途同归啊

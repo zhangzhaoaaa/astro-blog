@@ -1,5 +1,7 @@
-import { slug as slugger } from "github-slugger";
+import GithubSlugger from "github-slugger";
 
-export const slugifyStr = (str: string) => slugger(str);
+// Use a fresh slugger instance per call to avoid cross-call state
+// adding numeric suffixes like `-1` for repeated inputs during a build.
+export const slugifyStr = (str: string) => new GithubSlugger().slug(str);
 
-export const slugifyAll = (arr: string[]) => arr.map(str => slugifyStr(str));
+export const slugifyAll = (arr: string[]) => arr.map(slugifyStr);

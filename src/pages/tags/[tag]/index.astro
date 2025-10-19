@@ -4,32 +4,21 @@ import TagPosts from "@layouts/TagPosts.astro";
 import getPostsByTag from "@utils/getPostsByTag";
 import getPagination from "@utils/getPagination";
 import getUniqueTags from "@utils/getUniqueTags";
+import { slugifyStr } from "@utils/slugify";
 
-export async function getStaticPaths() {
-  console.log("postsdddd....");
-  const posts = await getCollection("blog");
-  console.log("posts....", posts);
+// Runtime data fetching for server output
+const { tag: paramTag } = Astro.params as { tag: string };
+const tag = paramTag;
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
-  const tags = getUniqueTags(posts);
+// Derive human-readable tag name if possible
+const slug = slugifyStr(tag as string);
+const matched = getUniqueTags(allPosts).find(t => t.tag === slug);
+const tagName: string = matched?.tagName ?? (tag as string) ?? slug;
 
-  return tags.map(({ tag, tagName }) => {
-    return {
-      params: { tag },
-      props: { tag, tagName, posts },
-    };
-  });
-}
+const postsByTag = getPostsByTag(allPosts, tag as string);
 
-const { tag, tagName, posts } = Astro.props;
-
-console.log("tags....", posts);
-const postsByTag = getPostsByTag(posts, tag);
-
-const pagination = getPagination({
-  posts: postsByTag,
-  page: 1,
-  isIndex: true,
-});
+const pagination = getPagination({ posts: postsByTag, page: 1, isIndex: true });
 ---
 
 <TagPosts {...pagination} {tag} {tagName} />

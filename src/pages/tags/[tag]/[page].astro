@@ -1,50 +1,21 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
 import TagPosts from "@layouts/TagPosts.astro";
 import getUniqueTags from "@utils/getUniqueTags";
 import getPostsByTag from "@utils/getPostsByTag";
-import getPageNumbers from "@utils/getPageNumbers";
 import getPagination from "@utils/getPagination";
+import { slugifyStr } from "@utils/slugify";
 
-export interface Props {
-  post: CollectionEntry<"blog">;
-  tag: string;
-  tagName: string;
-}
+const { page, tag } = Astro.params as { page: string; tag: string };
 
-export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-  console.log("posts .getCollection...", posts);
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const tagSlug = slugifyStr(tag);
+const matched = getUniqueTags(allPosts).find(t => t.tag === tagSlug);
+const tagName: string = matched?.tagName ?? tag ?? tagSlug;
 
-  const tags = getUniqueTags(posts);
+const postsByTag = getPostsByTag(allPosts, tag);
 
-  console.log("tags .getCollection...", tags);
-
-  return tags.flatMap(({ tag, tagName }) => {
-    console.log("page....", posts);
-    const tagPosts = getPostsByTag(posts, tag);
-    const totalPages = getPageNumbers(tagPosts.length);
-
-    return totalPages.map(page => ({
-      params: { tag, page },
-      props: { tag, tagName },
-    }));
-  });
-}
-
-const { page } = Astro.params;
-const { tag, tagName } = Astro.props;
-
-const posts = await getCollection("blog", ({ data }) => !data.draft);
-
-console.log("page..222..", posts);
-
-const postsByTag = getPostsByTag(posts, tag);
-
-const pagination = getPagination({
-  posts: postsByTag,
-  page,
-});
+const pagination = getPagination({ posts: postsByTag, page });
 ---
 
 <TagPosts {...pagination} {tag} {tagName} />

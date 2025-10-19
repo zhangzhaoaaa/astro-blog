@@ -6,6 +6,7 @@ title: 技术与思维：打造个性化分享工具的独立之路
 slug: "ifenxiang-indiehacker"
 draft: false
 description: 本文探讨了开发个性化分享工具的过程，包括选择技术栈、实现功能和面对的挑战。同时，深入讨论了独立开发所需的技能和思考
+tags: ["独立开发", "前端工程化", "产品思考", "运营与增长"]
 ---
 
 我做了一个微信读书分享的卡片工具，https://www.ifenxiang.xyz

@@ -1,10 +1,13 @@
 ---
 export interface Props {
-  tag: string;
+  tag: string; // slug or label; will derive slug for href
   size?: "sm" | "lg";
 }
 
+import { slugifyStr } from "@utils/slugify";
+
 const { tag, size = "sm" } = Astro.props;
+const tagSlug = slugifyStr(tag);
 ---
 
 <li
@@ -13,7 +16,7 @@ const { tag, size = "sm" } = Astro.props;
   }`}
 >
   <a
-    href={`/tags/${tag}`}
+    href={`/tags/${tagSlug}`}
     transition:name={tag}
     class={`${size === "sm" ? "text-sm" : "text-lg"} pr-2 group`}
   >

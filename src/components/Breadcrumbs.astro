@@ -1,37 +1,53 @@
 ---
-// Remove current url path and remove trailing slash if exists
+// Remove trailing slash if exists and split path
 const currentUrlPath = Astro.url.pathname.replace(/\/+$/, "");
+const segments = currentUrlPath.split("/").slice(1); // [ 'tags', '<slug>', '2' ]
 
-// Get url array from path
-// eg: /tags/tailwindcss => ['tags', 'tailwindcss']
-const breadcrumbList = currentUrlPath.split("/").slice(1);
+type Crumb = { label: string; href: string | null };
+const crumbs: Crumb[] = [];
 
-if (breadcrumbList[0] === "about") {
-  breadcrumbList[0] = "关于";
-} else if (breadcrumbList[0] === "posts") {
-  breadcrumbList[0] = "文章";
-} else if (breadcrumbList[0] === "tags") {
-  breadcrumbList[0] = "标签";
-} else if (breadcrumbList[0] === "search") {
-  breadcrumbList[0] = "搜索";
+if (segments.length > 0) {
+  const [first, second, third] = segments;
+
+  const mapFirstLabel = (s: string) =>
+    s === "about"
+      ? "关于"
+      : s === "posts"
+        ? "文章"
+        : s === "tags"
+          ? "标签"
+          : s === "search"
+            ? "搜索"
+            : s;
+
+  if (first === "posts") {
+    // Posts index or pagination
+    if (second && !isNaN(Number(second))) {
+      crumbs.push({ label: `Posts (page ${second})`, href: null });
+    } else {
+      crumbs.push({ label: mapFirstLabel(first), href: null });
+    }
+  } else if (first === "tags") {
+    // Tags index or tag detail pagination
+    if (!second) {
+      crumbs.push({ label: mapFirstLabel(first), href: null });
+    } else if (second && third && !isNaN(Number(third))) {
+      crumbs.push({ label: mapFirstLabel(first), href: "/tags" });
+      const pageSuffix = Number(third) === 1 ? "" : ` (page ${third})`;
+      crumbs.push({ label: `${decodeURIComponent(second)}${pageSuffix}`.trim(), href: null });
+    } else {
+      crumbs.push({ label: mapFirstLabel(first), href: "/tags" });
+      crumbs.push({ label: decodeURIComponent(second), href: null });
+    }
+  } else {
+    // Generic builder with cumulative hrefs
+    segments.forEach((seg, idx) => {
+      const label = idx === 0 ? mapFirstLabel(seg) : decodeURIComponent(seg);
+      const href = idx === segments.length - 1 ? null : `/${segments.slice(0, idx + 1).join("/")}`;
+      crumbs.push({ label, href });
+    });
+  }
 }
-
-// if breadcrumb is Home > Posts > 1 <etc>
-// replace Posts with Posts (page number)
-breadcrumbList[0] === "posts" &&
-  breadcrumbList.splice(0, 2, `Posts (page ${breadcrumbList[1] || 1})`);
-
-// if breadcrumb is Home > Tags > [tag] > [page] <etc>
-// replace [tag] > [page] with [tag] (page number)
-breadcrumbList[0] === "tags" &&
-  !isNaN(Number(breadcrumbList[2])) &&
-  breadcrumbList.splice(
-    1,
-    3,
-    `${breadcrumbList[1]} ${
-      Number(breadcrumbList[2]) === 1 ? "" : "(page " + breadcrumbList[2] + ")"
-    }`
-  );
 ---
 
 <nav class="breadcrumb" aria-label="breadcrumb">
@@ -40,26 +56,20 @@ breadcrumbList[0] === "tags" &&
       <a href="/">首页</a>
       <span aria-hidden="true">&raquo;</span>
     </li>
-    {
-      breadcrumbList.map((breadcrumb, index) =>
-        index + 1 === breadcrumbList.length ? (
-          <li>
-            <span
-              class={`${index > 0 ? "lowercase" : "capitalize"}`}
-              aria-current="page"
-            >
-              {/* make the last part lowercase in Home > Tags > some-tag */}
-              {decodeURIComponent(breadcrumb)}
-            </span>
-          </li>
-        ) : (
-          <li>
-            <a href={`/${breadcrumb}`}>{breadcrumb}</a>
-            <span aria-hidden="true">&raquo;</span>
-          </li>
-        )
+    {crumbs.map((c, index) => (
+      index === crumbs.length - 1 ? (
+        <li>
+          <span class={`${index > 0 ? "lowercase" : "capitalize"}`} aria-current="page">
+            {c.label}
+          </span>
+        </li>
+      ) : (
+        <li>
+          <a href={c.href!}>{c.label}</a>
+          <span aria-hidden="true">&raquo;</span>
+        </li>
       )
-    }
+    ))}
   </ul>
 </nav>
 

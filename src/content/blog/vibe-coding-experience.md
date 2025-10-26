@@ -1,7 +1,7 @@
 ---
 title: "从入门到放弃：一个 Vibe Coding 的血泪史"
 pubDatetime: 2025-10-26
-description: "待填写摘要"
+description: "本文回顾了用AI驱动的Vibe Coding开发复杂项目的全过程，揭示了AI在执行层面高效但在架构与决策上有限。作者反思，AI应作为高级助手，程序员需专注架构、产品与技术决策，将机械性工作交给AI，创造性工作留给自己。"
 tags: ["AI", "VibeCoding"]
 draft: false
 ---

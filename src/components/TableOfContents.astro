@@ -22,12 +22,12 @@ type Heading = { slug: string; text: string; subheadings: Heading[]; };
 
 <style>
   .toc {
-    position: sticky;
-    top: 20px;
-    float: right;
-    width: 250px;
+    width: 100%;
     padding: 1rem;
-    background: #f9f9f9;
-    border-radius: 5px;
+    background: rgb(var(--color-card));
+    border-radius: 6px;
+    border: 1px solid rgb(var(--color-border));
+    max-height: calc(100vh - 8rem);
+    overflow: auto;
   }
 </style>
